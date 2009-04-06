@@ -26,7 +26,7 @@ namespace Polaritoid
         TouchInputManager tI;
 
         SpriteFont font;
-        Texture2D playerTex, chaserTex, smartyTex;
+        Texture2D playerTex, chaserTex, smartyTex, standerTex;
         Player player;
         List<Shape> shapes;
 
@@ -78,11 +78,13 @@ namespace Polaritoid
             playerTex = Content.Load<Texture2D>("player");
             chaserTex = Content.Load<Texture2D>("chaser");
             smartyTex = Content.Load<Texture2D>("smarty");
+            standerTex = Content.Load<Texture2D>("stander");
 
             player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, new Sprite(playerTex, new Vector2(40, 40), new Vector2(16, 16)));
             shapes.Add(player);
             shapes.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, new Sprite(chaserTex, new Vector2(80, 40), new Vector2(16, 16))));
             shapes.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, new Sprite(smartyTex, new Vector2(80, 40), new Vector2(16, 16))));
+            shapes.Add(new Stander(new Vector2(40, 80), Polarity.Blue, new Sprite(standerTex, new Vector2(40, 80), new Vector2(16, 16))));
         }
 
         /// <summary>

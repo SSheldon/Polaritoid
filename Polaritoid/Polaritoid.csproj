@@ -73,6 +73,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="Stander.cs" />
     <Compile Include="VecOps.cs" />
   </ItemGroup>
   <ItemGroup>
