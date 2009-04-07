@@ -26,9 +26,14 @@ namespace Polaritoid
         TouchInputManager tI;
 
         SpriteFont font;
-        Texture2D playerTex, chaserTex, smartyTex, standerTex;
+        Texture2D playerTex, chaserTex, smartyTex, standerTex, roverTex;
         Player player;
         List<Shape> shapes;
+        int fieldWidth, fieldHeight;
+        /// <summary>
+        /// The position of the bottom-left corner of the view window.
+        /// </summary>
+        Vector2 viewCornerPosition;
 
         public Game1()
         {
@@ -55,6 +60,9 @@ namespace Polaritoid
             tI.TouchpadPressed += new InputEventHandler(PlayPress);
 
             shapes = new List<Shape>();
+            fieldWidth = 240;
+            fieldHeight = 320;
+            viewCornerPosition = Vector2.Zero;
 
             base.Initialize();
         }
@@ -79,12 +87,14 @@ namespace Polaritoid
             chaserTex = Content.Load<Texture2D>("chaser");
             smartyTex = Content.Load<Texture2D>("smarty");
             standerTex = Content.Load<Texture2D>("stander");
+            roverTex = Content.Load<Texture2D>("rover");
 
-            player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, new Sprite(playerTex, new Vector2(40, 40), new Vector2(16, 16)));
+            player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, playerTex, fieldWidth, fieldHeight);
             shapes.Add(player);
-            shapes.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, new Sprite(chaserTex, new Vector2(80, 40), new Vector2(16, 16))));
-            shapes.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, new Sprite(smartyTex, new Vector2(80, 40), new Vector2(16, 16))));
-            shapes.Add(new Stander(new Vector2(40, 80), Polarity.Blue, new Sprite(standerTex, new Vector2(40, 80), new Vector2(16, 16))));
+            shapes.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, chaserTex, fieldWidth, fieldHeight));
+            shapes.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, smartyTex, fieldWidth, fieldHeight));
+            shapes.Add(new Stander(new Vector2(40, 80), Polarity.Blue, standerTex, fieldWidth, fieldHeight));
+            shapes.Add(new Rover(new Vector2(80, 80), Polarity.Red, roverTex, fieldWidth, fieldHeight));
         }
 
         /// <summary>
@@ -107,9 +117,10 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            player.Update(gameTime, tI.TouchpadPosition);
             foreach (Shape shape in shapes)
             {
-                shape.Update(gameTime, player.position, player.polarity, tI.TouchpadPosition);
+                shape.Update(gameTime, player.position, player.polarity, viewCornerPosition);
             }
 
             base.Update(gameTime);
@@ -125,7 +136,7 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            //spriteBatch.DrawString(font, shapes[1].position.ToString(), new Vector2(0, 0), Color.White);
+            //spriteBatch.DrawString(font, shapes[4].position.ToString(), new Vector2(0, 0), Color.White);
             //spriteBatch.DrawString(font, shapes[1].velocity.ToString(), new Vector2(0, 20), Color.White);
             foreach (Shape shape in shapes)
             {

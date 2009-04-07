@@ -75,6 +75,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="Stander.cs" />
     <Compile Include="VecOps.cs" />
+    <Compile Include="Rover.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GameThumbnail.png" />

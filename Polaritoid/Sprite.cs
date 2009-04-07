@@ -13,15 +13,28 @@ namespace Polaritoid
         public Vector2 origin;
         public float scale;
         public Color tint;
+        public float layerDepth;
 
-        public Sprite(Texture2D texture, Vector2 position, Vector2 origin)
+        public Sprite(Texture2D texture, Vector2 position, Color tint, float rotation, Vector2 origin, float scale, float layerDepth)
         {
             this.texture = texture;
             this.position = position;
+            this.tint = tint;
+            this.rotation = rotation;
             this.origin = origin;
-            rotation = 0.0F;
-            scale = .75F;
-            tint = Color.White;
+            this.scale = scale;
+            this.layerDepth = layerDepth;            
+        }
+
+        public Sprite(Texture2D texture, Vector2 origin, float scale)
+            : this(texture, Vector2.Zero, Color.White, 0F, origin, scale, 0F) { }
+
+        public void Update(Vector2 position, Color tint, float rotation, float scale)
+        {
+            this.position = position;
+            this.tint = tint;
+            this.rotation = rotation;
+            this.scale = scale;
         }
 
         public void Draw(SpriteBatch batch)
@@ -35,7 +48,7 @@ namespace Polaritoid
                 origin,
                 scale,
                 SpriteEffects.None,
-                0.0F);
+                layerDepth);
         }
     }
 }

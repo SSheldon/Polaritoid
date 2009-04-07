@@ -7,19 +7,16 @@ namespace Polaritoid
 {
     class Player : Shape
     {
-        public Player(Vector2 position, Vector2 velocity, Polarity polarity, Sprite sprite)
-            : base(position, velocity, polarity, sprite)
+        public Player(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) { }
+
+        public void Update(GameTime gameTime, Vector2 touchpadPosition)
         {
+            velocity = 3F * touchpadPosition;
 
-        }
+            //base.Update(gameTime, position, polarity);
 
-        public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 touchpadPosition)
-        {
-            velocity = 3F * new Vector2(touchpadPosition.X, -touchpadPosition.Y);
-
-            base.Update(gameTime, playerPosition, playerPolarity, touchpadPosition);
-
-            if (velocity != Vector2.Zero) sprite.rotation = VecOps.Direction(velocity);
+            if (velocity != Vector2.Zero) sprite.rotation = VecOps.Direction(new Vector2(velocity.X, -velocity.Y));
         }
     }
 }

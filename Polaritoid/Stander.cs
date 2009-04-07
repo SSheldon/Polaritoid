@@ -7,18 +7,15 @@ namespace Polaritoid
 {
     class Stander : Shape
     {
-        public Stander(Vector2 position, Polarity polarity, Sprite sprite)
-            : base(position, Vector2.Zero, polarity, sprite)
-        {
+        public Stander(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, Vector2.Zero, polarity, texture, fieldWidth, fieldHeight) { }
 
-        }
-
-        public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 touchpadPosition)
+        public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
         {
             sprite.rotation += .05F;
             if (sprite.rotation >= 2F * (float)Math.PI) sprite.rotation -= 2F * (float)Math.PI;
 
-            base.Update(gameTime, playerPosition, playerPolarity, touchpadPosition);
+            base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
         }
     }
 }

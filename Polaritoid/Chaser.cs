@@ -7,17 +7,14 @@ namespace Polaritoid
 {
     class Chaser : Shape
     {
-        public Chaser(Vector2 position, Vector2 velocity, Polarity polarity, Sprite sprite)
-            : base(position, velocity, polarity, sprite)
-        {
+        public Chaser(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) { }
 
-        }
-
-        public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 touchpadPosition)
+        public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
         {
             velocity = playerPosition - position == Vector2.Zero ? Vector2.Zero : Vector2.Normalize(playerPosition - position) * .5F;
 
-            base.Update(gameTime, playerPosition, playerPolarity, touchpadPosition);
+            base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
         }
     }
 }
