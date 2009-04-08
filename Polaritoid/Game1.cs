@@ -26,7 +26,7 @@ namespace Polaritoid
         TouchInputManager tI;
 
         SpriteFont font;
-        Texture2D playerTex, chaserTex, smartyTex, standerTex, roverTex;
+        Texture2D playerTex, chaserTex, smartyTex, standerTex, roverTex, dualTex;
         Player player;
         List<Shape> shapes;
         int fieldWidth, fieldHeight;
@@ -88,6 +88,7 @@ namespace Polaritoid
             smartyTex = Content.Load<Texture2D>("smarty");
             standerTex = Content.Load<Texture2D>("stander");
             roverTex = Content.Load<Texture2D>("rover");
+            dualTex = Content.Load<Texture2D>("dual");
 
             player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, playerTex, fieldWidth, fieldHeight);
             shapes.Add(player);
@@ -95,6 +96,7 @@ namespace Polaritoid
             shapes.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, smartyTex, fieldWidth, fieldHeight));
             shapes.Add(new Stander(new Vector2(40, 80), Polarity.Blue, standerTex, fieldWidth, fieldHeight));
             shapes.Add(new Rover(new Vector2(80, 80), Polarity.Red, roverTex, fieldWidth, fieldHeight));
+            shapes.Add(new Dual(new Vector2(160, 160), Vector2.Zero, Polarity.Blue, dualTex, fieldWidth, fieldHeight));
         }
 
         /// <summary>
@@ -136,11 +138,11 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            //spriteBatch.DrawString(font, shapes[4].position.ToString(), new Vector2(0, 0), Color.White);
-            //spriteBatch.DrawString(font, shapes[1].velocity.ToString(), new Vector2(0, 20), Color.White);
+            //spriteBatch.DrawString(font, (shapes[5] as Dual).direction.ToString(), new Vector2(0, 0), Color.White);
+            //spriteBatch.DrawString(font, " ", new Vector2(0, 20), Color.White);
             foreach (Shape shape in shapes)
             {
-                shape.sprite.Draw(spriteBatch);
+                shape.Draw(spriteBatch);
             }
             spriteBatch.End();
 

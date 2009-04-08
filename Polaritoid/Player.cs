@@ -14,9 +14,9 @@ namespace Polaritoid
         {
             velocity = 3F * touchpadPosition;
 
-            //base.Update(gameTime, position, polarity);
-
             if (velocity != Vector2.Zero) sprite.rotation = VecOps.Direction(new Vector2(velocity.X, -velocity.Y));
+
+            //base.Update(gameTime, position, polarity);
         }
     }
 }

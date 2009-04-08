@@ -27,9 +27,9 @@ namespace Polaritoid
             if ((position + velocity).Y > fieldHeight - radius)
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitY);
 
-            base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
-
             sprite.rotation = VecOps.Direction(new Vector2(velocity.X, -velocity.Y));
+
+            base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
         }
     }
 }

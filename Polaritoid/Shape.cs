@@ -9,17 +9,17 @@ namespace Polaritoid
     {
         public Vector2 velocity;
         public Vector2 position;
-        public Sprite sprite;
+        protected Sprite sprite;
         public Polarity polarity;
         public int fieldWidth, fieldHeight;
-        public int radius = 12;
+        public int radius = 16;
 
         public Shape(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
         {
             this.position = position;
             this.velocity = velocity;
             this.polarity = polarity;
-            this.sprite = new Sprite(texture, new Vector2(16, 16), .75F);
+            this.sprite = new Sprite(texture, new Vector2(16, 16), 1F);
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
         }
@@ -28,7 +28,7 @@ namespace Polaritoid
         {
             Move();
 
-            sprite.position = new Vector2(position.X - viewCornerPosition.X, 319 - position.Y + viewCornerPosition.Y);
+            sprite.position = new Vector2(position.X - viewCornerPosition.X, 320 - position.Y + viewCornerPosition.Y);
             switch (polarity)
             {
                 case Polarity.Blue:
@@ -50,6 +50,11 @@ namespace Polaritoid
             if (position.X > fieldWidth - radius) position.X = fieldWidth - radius;
             if (position.Y < radius) position.Y = radius;
             if (position.Y > fieldHeight - radius) position.Y = fieldHeight - radius;
+        }
+
+        public virtual void Draw(SpriteBatch batch)
+        {
+            sprite.Draw(batch);
         }
 
         public float Speed
