@@ -13,7 +13,7 @@ namespace Polaritoid
         public Dual(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
             : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) 
         {
-            other = new Sprite(texture, new Vector2(16, 16), 1F);
+            other = new Sprite(texture, new Vector2(16, 16), (float)radius / 16F);
             direction = 0F;
         }
 
@@ -53,6 +53,84 @@ namespace Polaritoid
             other.rotation = sprite.rotation + (float)Math.PI;
 
             base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
+        }
+
+        /// <summary>
+        /// Returns true if player is dead.
+        /// </summary>
+        public override bool CollisionCheck(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity)
+        {
+            if (Vector2.Distance(playerPosition, position) <= radius * 2)
+            {
+                if (polarity == Polarity.Blue)
+                {
+                    if (VecOps.AngleBetween(Orientation, velocity) < (float)Math.PI * .5F)
+                    {
+                        //player collided with red side
+                        if (playerPolarity == Polarity.Blue)
+                        {
+                            //player dies
+                            return true;
+                        }
+                        else
+                        {
+                            //dual dies
+                            dead = true;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        //player collided with blue side
+                        if (playerPolarity == Polarity.Red)
+                        {
+                            //player dies
+                            return true;
+                        }
+                        else
+                        {
+                            float a = VecOps.AngleBetween(Orientation, velocity);
+                            //dual dies
+                            dead = true;
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    if (VecOps.AngleBetween(Orientation, velocity) < (float)Math.PI * .5F)
+                    {
+                        //player collided with blue side
+                        if (playerPolarity == Polarity.Red)
+                        {
+                            //player dies
+                            return true;
+                        }
+                        else
+                        {
+                            //dual dies
+                            dead = true;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        //player collided with red side
+                        if (playerPolarity == Polarity.Blue)
+                        {
+                            //player dies
+                            return true;
+                        }
+                        else
+                        {
+                            //dual dies
+                            dead = true;
+                            return false;
+                        }
+                    }
+                }
+            }
+            else return false;
         }
 
         public override void Draw(SpriteBatch batch)

@@ -28,7 +28,7 @@ namespace Polaritoid
         SpriteFont font;
         Texture2D playerTex, chaserTex, smartyTex, standerTex, roverTex, dualTex;
         Player player;
-        List<Shape> shapes;
+        List<Shape> enemies;
         int fieldWidth, fieldHeight;
         /// <summary>
         /// The position of the bottom-left corner of the view window.
@@ -59,7 +59,7 @@ namespace Polaritoid
             tI.TouchpadDeadZone = GamePadDeadZone.IndependentAxes;
             tI.TouchpadPressed += new InputEventHandler(PlayPress);
 
-            shapes = new List<Shape>();
+            enemies = new List<Shape>();
             fieldWidth = 240;
             fieldHeight = 320;
             viewCornerPosition = Vector2.Zero;
@@ -91,12 +91,11 @@ namespace Polaritoid
             dualTex = Content.Load<Texture2D>("dual");
 
             player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, playerTex, fieldWidth, fieldHeight);
-            shapes.Add(player);
-            shapes.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, chaserTex, fieldWidth, fieldHeight));
-            shapes.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, smartyTex, fieldWidth, fieldHeight));
-            shapes.Add(new Stander(new Vector2(40, 80), Polarity.Blue, standerTex, fieldWidth, fieldHeight));
-            shapes.Add(new Rover(new Vector2(80, 80), Polarity.Red, roverTex, fieldWidth, fieldHeight));
-            shapes.Add(new Dual(new Vector2(160, 160), Vector2.Zero, Polarity.Blue, dualTex, fieldWidth, fieldHeight));
+            enemies.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, chaserTex, fieldWidth, fieldHeight));
+            enemies.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, smartyTex, fieldWidth, fieldHeight));
+            enemies.Add(new Stander(new Vector2(40, 80), Polarity.Blue, standerTex, fieldWidth, fieldHeight));
+            enemies.Add(new Rover(new Vector2(80, 80), Polarity.Red, roverTex, fieldWidth, fieldHeight));
+            enemies.Add(new Dual(new Vector2(160, 160), Vector2.Zero, Polarity.Blue, dualTex, fieldWidth, fieldHeight));
         }
 
         /// <summary>
@@ -119,10 +118,19 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            player.Update(gameTime, tI.TouchpadPosition);
-            foreach (Shape shape in shapes)
+            player.Update(gameTime, tI.TouchpadPosition, viewCornerPosition);
+            foreach (Shape enemy in enemies)
             {
-                shape.Update(gameTime, player.position, player.polarity, viewCornerPosition);
+                enemy.Update(gameTime, player.position, player.polarity, viewCornerPosition);
+                if (enemy.CollisionCheck(gameTime, player.position, player.polarity))
+                {
+                    //player is dead
+                    //this.Exit();
+                }
+            }
+            for (int counter = enemies.Count - 1; counter >= 0; counter--)
+            {
+                if (enemies[counter].dead) enemies.RemoveAt(counter);
             }
 
             base.Update(gameTime);
@@ -138,11 +146,12 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            //spriteBatch.DrawString(font, (shapes[5] as Dual).direction.ToString(), new Vector2(0, 0), Color.White);
+            //spriteBatch.DrawString(font, (enemies[4] as Dual).direction.ToString(), new Vector2(0, 0), Color.White);
             //spriteBatch.DrawString(font, " ", new Vector2(0, 20), Color.White);
-            foreach (Shape shape in shapes)
+            player.Draw(spriteBatch);
+            foreach (Shape enemy in enemies)
             {
-                shape.Draw(spriteBatch);
+                enemy.Draw(spriteBatch);
             }
             spriteBatch.End();
 

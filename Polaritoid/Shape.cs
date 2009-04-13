@@ -13,13 +13,14 @@ namespace Polaritoid
         public Polarity polarity;
         public int fieldWidth, fieldHeight;
         public int radius = 16;
+        public bool dead = false;
 
         public Shape(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
         {
             this.position = position;
             this.velocity = velocity;
             this.polarity = polarity;
-            this.sprite = new Sprite(texture, new Vector2(16, 16), 1F);
+            this.sprite = new Sprite(texture, new Vector2(16, 16), (float)radius / 16F);
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
         }
@@ -50,6 +51,29 @@ namespace Polaritoid
             if (position.X > fieldWidth - radius) position.X = fieldWidth - radius;
             if (position.Y < radius) position.Y = radius;
             if (position.Y > fieldHeight - radius) position.Y = fieldHeight - radius;
+        }
+
+        /// <summary>
+        /// Returns true if player is dead.
+        /// </summary>
+        public virtual bool CollisionCheck(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity)
+        {
+            if (Vector2.Distance(playerPosition, position) <= radius * 2)
+            {
+                if ((polarity == Polarity.Blue && playerPolarity == Polarity.Red) ||
+                    (polarity == Polarity.Red && playerPolarity == Polarity.Blue))
+                {
+                    //player dies
+                    return true;
+                }
+                else
+                {
+                    //shape dies
+                    dead = true;
+                    return false;
+                }
+            }
+            else return false;
         }
 
         public virtual void Draw(SpriteBatch batch)

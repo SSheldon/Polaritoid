@@ -76,6 +76,8 @@ static class VecOps
     public static float AngleBetween(Vector3 value1, Vector3 value2)
     {
         float a = Vector3.Dot(value1, value2) / (value1.Length() * value2.Length());
+        if (a > 1F) a = 1F;
+        if (a < -1F) a = -1F;
         return (float)Math.Acos((double)a);
     }
 
