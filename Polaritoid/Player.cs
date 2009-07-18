@@ -7,8 +7,8 @@ namespace Polaritoid
 {
     class Player : Shape
     {
-        public Player(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
-            : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) { }
+        public Player(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, polarity, texture, fieldWidth, fieldHeight) { }
 
         public void Update(GameTime gameTime, Vector2 touchpadPosition, Vector2 viewCornerPosition)
         {

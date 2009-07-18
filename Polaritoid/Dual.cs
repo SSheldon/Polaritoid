@@ -10,8 +10,8 @@ namespace Polaritoid
         Sprite other;
         public float direction;
 
-        public Dual(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
-            : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) 
+        public Dual(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, polarity, texture, fieldWidth, fieldHeight) 
         {
             other = new Sprite(texture, new Vector2(16, 16), (float)radius / 16F);
             direction = 0F;

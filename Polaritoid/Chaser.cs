@@ -7,8 +7,8 @@ namespace Polaritoid
 {
     class Chaser : Shape
     {
-        public Chaser(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
-            : base(position, velocity, polarity, texture, fieldWidth, fieldHeight) { }
+        public Chaser(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+            : base(position, polarity, texture, fieldWidth, fieldHeight) { }
 
         public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
         {

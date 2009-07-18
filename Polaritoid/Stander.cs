@@ -8,7 +8,7 @@ namespace Polaritoid
     class Stander : Shape
     {
         public Stander(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
-            : base(position, Vector2.Zero, polarity, texture, fieldWidth, fieldHeight) { }
+            : base(position, polarity, texture, fieldWidth, fieldHeight) { }
 
         public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
         {

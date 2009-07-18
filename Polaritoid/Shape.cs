@@ -7,7 +7,7 @@ namespace Polaritoid
 {
     public class Shape
     {
-        public Vector2 velocity;
+        public Vector2 velocity = Vector2.Zero;
         public Vector2 position;
         protected Sprite sprite;
         public Polarity polarity;
@@ -15,17 +15,16 @@ namespace Polaritoid
         public int radius = 16;
         public bool dead = false;
 
-        public Shape(Vector2 position, Vector2 velocity, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+        public Shape(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
         {
             this.position = position;
-            this.velocity = velocity;
             this.polarity = polarity;
             this.sprite = new Sprite(texture, new Vector2(16, 16), (float)radius / 16F);
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
         }
 
-        public virtual void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
+        public virtual void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition/*, List<Shape> enemies*/)
         {
             Move();
 

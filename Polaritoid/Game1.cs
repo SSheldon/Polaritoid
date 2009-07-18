@@ -15,6 +15,7 @@ using InputManagement;
 namespace Polaritoid
 {
     public enum Polarity { Red, Blue, Both };
+    public enum Enemy { Chaser, Smarty, Stander, Rover, Dual, Shooter, Layer };
 
     /// <summary>
     /// This is the main type for your game
@@ -26,9 +27,9 @@ namespace Polaritoid
         TouchInputManager tI;
 
         SpriteFont font;
-        Texture2D playerTex, chaserTex, smartyTex, standerTex, roverTex, dualTex;
         Player player;
-        List<Shape> enemies;
+        EnemyList enemies;
+        Dictionary<String, Texture2D> textures;
         int fieldWidth, fieldHeight;
         /// <summary>
         /// The position of the bottom-left corner of the view window.
@@ -59,10 +60,10 @@ namespace Polaritoid
             tI.TouchpadDeadZone = GamePadDeadZone.IndependentAxes;
             tI.TouchpadPressed += new InputEventHandler(PlayPress);
 
-            enemies = new List<Shape>();
             fieldWidth = 240;
             fieldHeight = 320;
             viewCornerPosition = Vector2.Zero;
+            textures = new Dictionary<string, Texture2D>();
 
             base.Initialize();
         }
@@ -83,19 +84,14 @@ namespace Polaritoid
 
             // TODO: use this.Content to load your game content here
             font = Content.Load<SpriteFont>("font");
-            playerTex = Content.Load<Texture2D>("player");
-            chaserTex = Content.Load<Texture2D>("chaser");
-            smartyTex = Content.Load<Texture2D>("smarty");
-            standerTex = Content.Load<Texture2D>("stander");
-            roverTex = Content.Load<Texture2D>("rover");
-            dualTex = Content.Load<Texture2D>("dual");
-
-            player = new Player(new Vector2(40, 40), Vector2.Zero, Polarity.Red, playerTex, fieldWidth, fieldHeight);
-            enemies.Add(new Chaser(new Vector2(80, 40), Vector2.Zero, Polarity.Red, chaserTex, fieldWidth, fieldHeight));
-            enemies.Add(new Smarty(new Vector2(80, 80), Vector2.Zero, Polarity.Blue, smartyTex, fieldWidth, fieldHeight));
-            enemies.Add(new Stander(new Vector2(40, 80), Polarity.Blue, standerTex, fieldWidth, fieldHeight));
-            enemies.Add(new Rover(new Vector2(80, 80), Polarity.Red, roverTex, fieldWidth, fieldHeight));
-            enemies.Add(new Dual(new Vector2(160, 160), Vector2.Zero, Polarity.Blue, dualTex, fieldWidth, fieldHeight));
+            textures.Add("player", Content.Load<Texture2D>("player"));
+            textures.Add("chaser", Content.Load<Texture2D>("chaser"));
+            textures.Add("smarty", Content.Load<Texture2D>("smarty"));
+            textures.Add("stander", Content.Load<Texture2D>("stander"));
+            textures.Add("rover", Content.Load<Texture2D>("rover"));
+            textures.Add("dual", Content.Load<Texture2D>("dual"));
+            textures.Add("shooter", Content.Load<Texture2D>("shooter"));
+            textures.Add("layer", Content.Load<Texture2D>("layer"));
         }
 
         /// <summary>
@@ -105,6 +101,21 @@ namespace Polaritoid
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+        }
+
+        protected override void BeginRun()
+        {
+            enemies = new EnemyList(fieldWidth, fieldHeight, textures);
+            player = new Player(new Vector2(40, 40), Polarity.Red, textures["player"], fieldWidth, fieldHeight);
+            enemies.Spawn(Enemy.Chaser, new Vector2(80, 40), Polarity.Red);
+            enemies.Spawn(Enemy.Smarty, new Vector2(80, 80), Polarity.Blue);
+            enemies.Spawn(Enemy.Stander, new Vector2(40, 80), Polarity.Blue);
+            enemies.Spawn(Enemy.Rover, new Vector2(80, 80), Polarity.Red);
+            enemies.Spawn(Enemy.Dual, new Vector2(160, 160), Polarity.Blue);
+            enemies.Spawn(Enemy.Shooter, new Vector2(160, 200), Polarity.Red);
+            enemies.Spawn(Enemy.Layer, new Vector2(40, 200), Polarity.Blue);
+
+            base.BeginRun();
         }
 
         /// <summary>
@@ -119,18 +130,10 @@ namespace Polaritoid
                 this.Exit();
 
             player.Update(gameTime, tI.TouchpadPosition, viewCornerPosition);
-            foreach (Shape enemy in enemies)
+            if (enemies.UpdateEnemies(gameTime, player.position, player.polarity, viewCornerPosition))
             {
-                enemy.Update(gameTime, player.position, player.polarity, viewCornerPosition);
-                if (enemy.CollisionCheck(gameTime, player.position, player.polarity))
-                {
-                    //player is dead
-                    //this.Exit();
-                }
-            }
-            for (int counter = enemies.Count - 1; counter >= 0; counter--)
-            {
-                if (enemies[counter].dead) enemies.RemoveAt(counter);
+                //player is dead
+                //this.Exit();
             }
 
             base.Update(gameTime);
@@ -146,16 +149,19 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            //spriteBatch.DrawString(font, (enemies[4] as Dual).direction.ToString(), new Vector2(0, 0), Color.White);
-            //spriteBatch.DrawString(font, " ", new Vector2(0, 20), Color.White);
             player.Draw(spriteBatch);
-            foreach (Shape enemy in enemies)
-            {
-                enemy.Draw(spriteBatch);
-            }
+            enemies.DrawEnemies(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        protected void DrawBoundaries(SpriteBatch batch)
+        {
+            //left bound from (-1, -1) to (-1, fieldHeight + 1)
+            //top bound from (-1, fieldHeight + 1) to (fieldWidth + 1, fieldHeight + 1)
+            //right bound from (fieldWidth + 1, fieldHeight + 1) to (fieldWidth + 1, -1)
+            //bottom bound from (fieldWidth + 1, -1) to (-1, -1)
         }
     }
 }

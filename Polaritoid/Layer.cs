@@ -5,15 +5,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    class Rover : Shape
+    class Layer : Shape
     {
-        public Rover(Vector2 position, float direction, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+        public TimeSpan? lastMine;
+
+        public Layer(Vector2 position, float direction, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
             : base(position, polarity, texture, fieldWidth, fieldHeight) 
         {
             velocity = VecOps.Polar(.5F, direction);
         }
 
-        public Rover(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
+        public Layer(Vector2 position, Polarity polarity, Texture2D texture, int fieldWidth, int fieldHeight)
             : this(position, (float)(new Random().NextDouble() * 2D * Math.PI), polarity, texture, fieldWidth, fieldHeight) { }
 
         public override void Update(GameTime gameTime, Vector2 playerPosition, Polarity playerPolarity, Vector2 viewCornerPosition)
@@ -28,6 +30,8 @@ namespace Polaritoid
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitY);
 
             sprite.rotation = VecOps.Direction(new Vector2(velocity.X, -velocity.Y));
+
+            if (!lastMine.HasValue) lastMine = gameTime.TotalGameTime;
 
             base.Update(gameTime, playerPosition, playerPolarity, viewCornerPosition);
         }
