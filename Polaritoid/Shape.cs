@@ -68,4 +68,34 @@ namespace Polaritoid
             }
         }
     }
+
+    public interface IDirectable
+    {
+        float Direction
+        {
+            get;
+            set;
+        }
+    }
+
+    public static class IDirectableExtension
+    {
+        public static void TurnTowards(this IDirectable s, float dir)
+        {
+            float diff = Math.Abs(dir - s.Direction);
+            if ((diff > (float)Math.PI && dir < s.Direction) || (diff <= (float)Math.PI && dir > s.Direction))
+                s.Direction += diff < .05F ? diff : .05F;
+            else
+                if ((diff <= (float)Math.PI && dir < s.Direction) || (diff > (float)Math.PI && dir > s.Direction))
+                    s.Direction -= diff < .05F ? diff : .05F;
+
+            if (s.Direction >= 2F * (float)Math.PI) s.Direction -= 2F * (float)Math.PI;
+            if (s.Direction < 0) s.Direction += 2F * (float)Math.PI;
+        }
+
+        public static void TurnTowards(this IDirectable s, Vector2 orientation)
+        {
+            s.TurnTowards(VecOps.Direction(orientation));
+        }
+    }
 }

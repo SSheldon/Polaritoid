@@ -1,18 +1,21 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace Polaritoid
 {
-    class Layer : Rover
+    public class Layer : Rover
     {
-        private TimeSpan? lastMine;
+        protected TimeSpan? lastMine;
+        protected Polarity minePolarity;
 
         public Layer(Field field, Vector2 position, float direction, Polarity polarity)
-            : base(field, position, direction, polarity) { }
+            : base(field, position, direction, polarity)
+        {
+            minePolarity = polarity;
+        }
 
         public Layer(Field field, Vector2 position, Polarity polarity)
-            : base(field, position, polarity) { }
+            : this(field, position, (float)(new Random().NextDouble() * 2D * Math.PI), polarity) { }
 
         public override void PreMove()
         {
@@ -20,7 +23,7 @@ namespace Polaritoid
             if (!lastMine.HasValue) lastMine = field.Time;
             if (field.Time.Subtract(lastMine.Value).Seconds > 2)
             {
-                field.Spawn(Enemy.Stander, position, polarity);
+                field.Spawn(typeof(Stander), position, minePolarity);
                 lastMine = field.Time;
             }
         }

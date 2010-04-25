@@ -34,34 +34,10 @@ namespace Polaritoid
             this.height = height;
         }
 
-        public void Spawn(Enemy enemy, Vector2 position, Polarity polarity)
+        public void Spawn(Type enemy, Vector2 position, Polarity polarity)
         {
-            Shape s = null;
-            switch (enemy)
-            {
-                case Enemy.Chaser:
-                    s = new Chaser(this, position, polarity);
-                    break;
-                case Enemy.Dual:
-                    s = new Dual(this, position, polarity);
-                    break;
-                case Enemy.Rover:
-                    s = new Rover(this, position, polarity);
-                    break;
-                case Enemy.Smarty:
-                    s = new Smarty(this, position, polarity);
-                    break;
-                case Enemy.Stander:
-                    s = new Stander(this, position, polarity);
-                    break;
-                case Enemy.Shooter:
-                    s = new Shooter(this, position, polarity);
-                    break;
-                case Enemy.Layer:
-                    s = new Layer(this, position, polarity);
-                    break;
-            }
-            this.Add(s);
+            this.Add((Shape)enemy.GetConstructor(new Type[] { typeof(Field), typeof(Vector2), typeof(Polarity) }).Invoke(
+                new object[] { this, position, polarity }));
         }
 
         public void Spawn(Vector2 position, Polarity polarity, float direction)
@@ -74,7 +50,6 @@ namespace Polaritoid
             time = gameTime.TotalGameTime;
             bool playerDead = false;
             for (int i = 0; i < Count; i++) this[i].Update();
-            //foreach (Shape s in this) s.Update();
             for (int counter = this.Count - 1; counter >= 0; counter--)
             {
                 Shape s = this[counter];

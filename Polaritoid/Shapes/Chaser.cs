@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    class Chaser : Shape
+    public class Chaser : Shape
     {
         public Chaser(Field field, Vector2 position, Polarity polarity)
             : base(field, position, polarity) { }

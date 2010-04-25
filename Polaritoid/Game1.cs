@@ -15,7 +15,6 @@ using InputManagement;
 namespace Polaritoid
 {
     public enum Polarity { Red, Blue, Both };
-    public enum Enemy { Chaser, Smarty, Stander, Rover, Dual, Shooter, Layer };
 
     /// <summary>
     /// This is the main type for your game
@@ -105,14 +104,14 @@ namespace Polaritoid
         protected override void BeginRun()
         {
             enemies = new Field(fieldWidth, fieldHeight);
-            enemies.Add(new Player(enemies, new Vector2(40, 40), Polarity.Red));
-            enemies.Spawn(Enemy.Chaser, new Vector2(80, 40), Polarity.Red);
-            enemies.Spawn(Enemy.Smarty, new Vector2(80, 80), Polarity.Blue);
-            enemies.Spawn(Enemy.Stander, new Vector2(40, 80), Polarity.Blue);
-            enemies.Spawn(Enemy.Rover, new Vector2(80, 80), Polarity.Red);
-            enemies.Spawn(Enemy.Dual, new Vector2(160, 160), Polarity.Blue);
-            enemies.Spawn(Enemy.Shooter, new Vector2(160, 200), Polarity.Red);
-            enemies.Spawn(Enemy.Layer, new Vector2(40, 200), Polarity.Blue);
+            enemies.Spawn(typeof(Player), new Vector2(40, 40), Polarity.Red);
+            enemies.Spawn(typeof(Chaser), new Vector2(80, 40), Polarity.Red);
+            enemies.Spawn(typeof(Smarty), new Vector2(80, 80), Polarity.Blue);
+            enemies.Spawn(typeof(Stander), new Vector2(40, 80), Polarity.Blue);
+            enemies.Spawn(typeof(Rover), new Vector2(80, 80), Polarity.Red);
+            enemies.Spawn(typeof(Dual), new Vector2(160, 160), Polarity.Blue);
+            enemies.Spawn(typeof(Shooter), new Vector2(160, 200), Polarity.Red);
+            enemies.Spawn(typeof(Layer), new Vector2(40, 200), Polarity.Blue);
 
             base.BeginRun();
         }
@@ -151,6 +150,7 @@ namespace Polaritoid
             foreach (Shape s in enemies)
             {
                 GenerateSprite(s).Draw(spriteBatch);
+                if (s is Dual) GenerateOtherSprite((Dual)s).Draw(spriteBatch);
             }
             spriteBatch.End();
 
@@ -171,6 +171,15 @@ namespace Polaritoid
                 new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
                 (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
                 VecOps.Direction(new Vector2(s.GetOrientation().X, -s.GetOrientation().Y)),
+                new Vector2(16, 16), (float)s.radius / 16F, 0F);
+        }
+
+        protected Sprite GenerateOtherSprite(Dual s)
+        {
+            return new Sprite(textures[typeof(Dual)],
+                new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
+                (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
+                VecOps.Direction(Vector2.Negate(new Vector2(s.GetOrientation().X, -s.GetOrientation().Y))),
                 new Vector2(16, 16), (float)s.radius / 16F, 0F);
         }
     }

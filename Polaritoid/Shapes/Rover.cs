@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    class Rover : Shape
+    public class Rover : Shape
     {
         public Rover(Field field, Vector2 position, float direction, Polarity polarity)
             : base(field, position, polarity) 

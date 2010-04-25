@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    class Shooter : Stander
+    public class Shooter : Stander, IDirectable
     {
         public TimeSpan? lastShot;
 
@@ -19,25 +17,13 @@ namespace Polaritoid
         {
             if (!lastShot.HasValue) lastShot = field.Time;
 
-            Vector2 displacementToPlayer = field.Player.position - position;
-            float diff = Math.Abs(VecOps.Direction(displacementToPlayer) - direction);
-            if ((diff > (float)Math.PI && VecOps.Direction(displacementToPlayer) < direction) ||
-                (diff <= (float)Math.PI && VecOps.Direction(displacementToPlayer) > direction))
-                direction += diff < .05F ? diff : .05F;
-            else
-                if ((diff <= (float)Math.PI && VecOps.Direction(displacementToPlayer) < direction) ||
-                    (diff > (float)Math.PI && VecOps.Direction(displacementToPlayer) > direction))
-                    direction -= diff < .05F ? diff : .05F;
-
-            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-            if (direction < 0) direction += 2F * (float)Math.PI;
+            this.TurnTowards(field.Player.position - position);
 
             if (field.Time.Subtract(lastShot.Value).Seconds > 2)
             {
-                field.Spawn(position, polarity, direction);
+                field.Spawn(position, polarity, Direction);
                 lastShot = field.Time;
             }
-
         }
     }
 }

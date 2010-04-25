@@ -1,13 +1,21 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    class Dual : Chaser
+    public class Dual : Chaser, IDirectable
     {
-        public float direction;
+        private float direction;
+        public float Direction
+        {
+            get { return direction; }
+            set
+            {
+                direction = value;
+                if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
+                if (direction < 0) direction += 2F * (float)Math.PI;
+            }
+        }
 
         public Dual(Field field, Vector2 position, Polarity polarity)
             : base(field, position, polarity) 
@@ -18,19 +26,19 @@ namespace Polaritoid
         public override void PreMove()
         {
             base.PreMove();
-            if (!IsPlayerPolarity) velocity = Vector2.Negate(velocity);
-            float diff = Math.Abs(VecOps.Direction(velocity) - direction);
-            if ((diff > (float)Math.PI && VecOps.Direction(velocity) < direction) ||
-                (diff <= (float)Math.PI && VecOps.Direction(velocity) > direction)) 
-                direction += diff < .05F ? diff : .05F;
-            else
-                if ((diff <= (float)Math.PI && VecOps.Direction(velocity) < direction) || 
-                    (diff > (float)Math.PI && VecOps.Direction(velocity) > direction))
-                    direction -= diff < .05F ? diff : .05F;
-            if (!IsPlayerPolarity) velocity = Vector2.Negate(velocity);
 
-            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-            if (direction < 0) direction += 2F * (float)Math.PI;
+            if (!IsPlayerPolarity) this.TurnTowards(velocity);
+            else this.TurnTowards(Vector2.Negate(velocity));
+        }
+
+        private bool OppositeIsPlayerPolarity
+        {
+            get
+            {
+                Polarity opp = (polarity == Polarity.Red ? Polarity.Blue : Polarity.Red);
+                return opp == Polarity.Blue && field.Player.polarity != Polarity.Red ||
+                    opp == Polarity.Red && field.Player.polarity != Polarity.Blue;
+            }
         }
 
         /// <summary>
@@ -38,68 +46,15 @@ namespace Polaritoid
         /// </summary>
         public override bool KillsPlayer()
         {
-            if (polarity == Polarity.Blue)
+            if (VecOps.AngleBetween(GetOrientation(), velocity) < (float)Math.PI * .5F)
             {
-                if (VecOps.AngleBetween(GetOrientation(), velocity) < (float)Math.PI * .5F)
-                {
-                    //player collided with red side
-                    //if player is blue, player
-                    if (field.Player.polarity == Polarity.Blue)
-                    {
-                        //player dies
-                        return true;
-                    }
-                    else
-                    {
-                        //dual dies
-                        return false;
-                    }
-                }
-                else
-                {
-                    //player collided with blue side
-                    if (field.Player.polarity == Polarity.Red)
-                    {
-                        //player dies
-                        return true;
-                    }
-                    else
-                    {
-                        //dual dies
-                        return false;
-                    }
-                }
+                //player collided with polarity side
+                return base.KillsPlayer();
             }
             else
             {
-                if (VecOps.AngleBetween(GetOrientation(), velocity) < (float)Math.PI * .5F)
-                {
-                    //player collided with blue side
-                    if (field.Player.polarity == Polarity.Red)
-                    {
-                        //player dies
-                        return true;
-                    }
-                    else
-                    {
-                        //dual dies
-                        return false;
-                    }
-                }
-                else
-                {
-                    //player collided with red side
-                    if (field.Player.polarity == Polarity.Blue)
-                    {
-                        //player dies
-                        return true;
-                    }
-                    else
-                    {
-                        //dual dies
-                        return false;
-                    }
-                }
+                //player collided with opposite polarity side
+                return !OppositeIsPlayerPolarity;
             }
         }
 
