@@ -27,9 +27,8 @@ namespace Polaritoid
         TouchInputManager tI;
 
         SpriteFont font;
-        Player player;
-        EnemyList enemies;
-        Dictionary<String, Texture2D> textures;
+        Field enemies;
+        Dictionary<Type, Texture2D> textures;
         int fieldWidth, fieldHeight;
         /// <summary>
         /// The position of the bottom-left corner of the view window.
@@ -63,14 +62,14 @@ namespace Polaritoid
             fieldWidth = 240;
             fieldHeight = 320;
             viewCornerPosition = Vector2.Zero;
-            textures = new Dictionary<string, Texture2D>();
+            textures = new Dictionary<Type, Texture2D>();
 
             base.Initialize();
         }
 
         void PlayPress()
         {
-            player.polarity = player.polarity == Polarity.Red ? Polarity.Blue : Polarity.Red;
+            enemies.Player.polarity = enemies.Player.polarity == Polarity.Red ? Polarity.Blue : Polarity.Red;
         }
 
         /// <summary>
@@ -84,14 +83,14 @@ namespace Polaritoid
 
             // TODO: use this.Content to load your game content here
             font = Content.Load<SpriteFont>("font");
-            textures.Add("player", Content.Load<Texture2D>("player"));
-            textures.Add("chaser", Content.Load<Texture2D>("chaser"));
-            textures.Add("smarty", Content.Load<Texture2D>("smarty"));
-            textures.Add("stander", Content.Load<Texture2D>("stander"));
-            textures.Add("rover", Content.Load<Texture2D>("rover"));
-            textures.Add("dual", Content.Load<Texture2D>("dual"));
-            textures.Add("shooter", Content.Load<Texture2D>("shooter"));
-            textures.Add("layer", Content.Load<Texture2D>("layer"));
+            textures.Add(typeof(Player), Content.Load<Texture2D>("player"));
+            textures.Add(typeof(Chaser), Content.Load<Texture2D>("chaser"));
+            textures.Add(typeof(Smarty), Content.Load<Texture2D>("smarty"));
+            textures.Add(typeof(Stander), Content.Load<Texture2D>("stander"));
+            textures.Add(typeof(Rover), Content.Load<Texture2D>("rover"));
+            textures.Add(typeof(Dual), Content.Load<Texture2D>("dual"));
+            textures.Add(typeof(Shooter), Content.Load<Texture2D>("shooter"));
+            textures.Add(typeof(Layer), Content.Load<Texture2D>("layer"));
         }
 
         /// <summary>
@@ -105,8 +104,8 @@ namespace Polaritoid
 
         protected override void BeginRun()
         {
-            enemies = new EnemyList(fieldWidth, fieldHeight, textures);
-            player = new Player(new Vector2(40, 40), Polarity.Red, textures["player"], fieldWidth, fieldHeight);
+            enemies = new Field(fieldWidth, fieldHeight);
+            enemies.Add(new Player(enemies, new Vector2(40, 40), Polarity.Red));
             enemies.Spawn(Enemy.Chaser, new Vector2(80, 40), Polarity.Red);
             enemies.Spawn(Enemy.Smarty, new Vector2(80, 80), Polarity.Blue);
             enemies.Spawn(Enemy.Stander, new Vector2(40, 80), Polarity.Blue);
@@ -129,8 +128,8 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            player.Update(gameTime, tI.TouchpadPosition, viewCornerPosition);
-            if (enemies.UpdateEnemies(gameTime, player.position, player.polarity, viewCornerPosition))
+            enemies.Player.velocity = tI.TouchpadPosition * 3F;
+            if (enemies.Update(gameTime))
             {
                 //player is dead
                 //this.Exit();
@@ -149,8 +148,10 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            player.Draw(spriteBatch);
-            enemies.DrawEnemies(spriteBatch);
+            foreach (Shape s in enemies)
+            {
+                GenerateSprite(s).Draw(spriteBatch);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -162,6 +163,15 @@ namespace Polaritoid
             //top bound from (-1, fieldHeight + 1) to (fieldWidth + 1, fieldHeight + 1)
             //right bound from (fieldWidth + 1, fieldHeight + 1) to (fieldWidth + 1, -1)
             //bottom bound from (fieldWidth + 1, -1) to (-1, -1)
+        }
+
+        protected Sprite GenerateSprite(Shape s)
+        {
+            return new Sprite(textures[s.GetType()],
+                new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
+                (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
+                VecOps.Direction(new Vector2(s.GetOrientation().X, -s.GetOrientation().Y)),
+                new Vector2(16, 16), (float)s.radius / 16F, 0F);
         }
     }
 }

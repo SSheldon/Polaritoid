@@ -65,21 +65,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chaser.cs" />
+    <Compile Include="Shapes\Chaser.cs" />
     <Compile Include="EnemyList.cs" />
-    <Compile Include="Layer.cs" />
-    <Compile Include="Dual.cs" />
-    <Compile Include="Shooter.cs" />
-    <Compile Include="Smarty.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Shapes\Layer.cs" />
+    <Compile Include="Shapes\Dual.cs" />
+    <Compile Include="Shapes\Shooter.cs" />
+    <Compile Include="Shapes\Smarty.cs" />
+    <Compile Include="Shapes\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="Sprite.cs" />
-    <Compile Include="Stander.cs" />
+    <Compile Include="Shapes\Stander.cs" />
     <Compile Include="VecOps.cs" />
-    <Compile Include="Rover.cs" />
+    <Compile Include="Shapes\Rover.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GameThumbnail.png" />
