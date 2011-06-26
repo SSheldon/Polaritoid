@@ -49,9 +49,9 @@ namespace Polaritoid
             get { return velocity.Length(); }
         }
 
-        public virtual Vector2 GetOrientation()
+        public virtual Vector2 Orientation
         {
-            return Vector2.Normalize(velocity);
+            get { return Vector2.Normalize(velocity); }
         }
 
         public virtual bool KillsPlayer()

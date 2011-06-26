@@ -28,9 +28,9 @@ namespace Polaritoid
             Direction += .05F;
         }
 
-        public override Vector2 GetOrientation()
+        public override Vector2 Orientation
         {
-            return VecOps.Polar(1F, Direction);
+            get { return VecOps.Polar(1F, Direction); }
         }
     }
 }

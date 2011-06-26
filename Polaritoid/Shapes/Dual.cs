@@ -46,7 +46,7 @@ namespace Polaritoid
         /// </summary>
         public override bool KillsPlayer()
         {
-            if (VecOps.AngleBetween(GetOrientation(), velocity) < (float)Math.PI * .5F)
+            if (VecOps.AngleBetween(Orientation, velocity) < (float)Math.PI * .5F)
             {
                 //player collided with polarity side
                 return base.KillsPlayer();
@@ -58,9 +58,9 @@ namespace Polaritoid
             }
         }
 
-        public override Vector2 GetOrientation()
+        public override Vector2 Orientation
         {
-            return VecOps.Polar(1F, direction);
+            get { return VecOps.Polar(1F, direction); }
         }
     }
 }

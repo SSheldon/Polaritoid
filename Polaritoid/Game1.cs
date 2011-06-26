@@ -161,7 +161,7 @@ namespace Polaritoid
             return new Sprite(textures[s.GetType()],
                 new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
                 (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
-                VecOps.Direction(new Vector2(s.GetOrientation().X, -s.GetOrientation().Y)),
+                VecOps.Direction(new Vector2(s.Orientation.X, -s.Orientation.Y)),
                 new Vector2(16, 16), (float)s.radius / 16F, 0F);
         }
 
@@ -170,7 +170,7 @@ namespace Polaritoid
             return new Sprite(textures[typeof(Dual)],
                 new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
                 (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
-                VecOps.Direction(Vector2.Negate(new Vector2(s.GetOrientation().X, -s.GetOrientation().Y))),
+                VecOps.Direction(Vector2.Negate(new Vector2(s.Orientation.X, -s.Orientation.Y))),
                 new Vector2(16, 16), (float)s.radius / 16F, 0F);
         }
     }
