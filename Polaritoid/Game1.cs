@@ -25,7 +25,6 @@ namespace Polaritoid
         SpriteFont font;
         Field enemies;
         Dictionary<Type, Texture2D> textures;
-        int fieldWidth, fieldHeight;
         /// <summary>
         /// The position of the bottom-left corner of the view window.
         /// </summary>
@@ -34,6 +33,9 @@ namespace Polaritoid
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = 480;
+
             Content.RootDirectory = "Content";
 
             // Frame rate is 30 fps by default for Windows Phone.
@@ -48,10 +50,6 @@ namespace Polaritoid
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            fieldWidth = 240;
-            fieldHeight = 320;
             viewCornerPosition = Vector2.Zero;
             textures = new Dictionary<Type, Texture2D>();
 
@@ -95,7 +93,7 @@ namespace Polaritoid
 
         protected override void BeginRun()
         {
-            enemies = new Field(fieldWidth, fieldHeight);
+            enemies = new Field(480, 800);
             enemies.Spawn(typeof(Player), new Vector2(40, 40), Polarity.Red);
             enemies.Spawn(typeof(Chaser), new Vector2(80, 40), Polarity.Red);
             enemies.Spawn(typeof(Smarty), new Vector2(80, 80), Polarity.Blue);
@@ -156,10 +154,16 @@ namespace Polaritoid
             //bottom bound from (fieldWidth + 1, -1) to (-1, -1)
         }
 
+        private Vector2 FieldToScreen(Vector2 v)
+        {
+            return new Vector2(v.X - viewCornerPosition.X,
+                GraphicsDevice.Viewport.Height - v.Y + viewCornerPosition.Y);
+        }
+
         protected Sprite GenerateSprite(Shape s)
         {
             return new Sprite(textures[s.GetType()],
-                new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
+                FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
                 VecOps.Direction(new Vector2(s.Orientation.X, -s.Orientation.Y)),
                 new Vector2(16, 16), (float)s.radius / 16F, 0F);
@@ -168,7 +172,7 @@ namespace Polaritoid
         protected Sprite GenerateOtherSprite(Dual s)
         {
             return new Sprite(textures[typeof(Dual)],
-                new Vector2(s.position.X - viewCornerPosition.X, 320 - s.position.Y + viewCornerPosition.Y),
+                FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
                 VecOps.Direction(Vector2.Negate(new Vector2(s.Orientation.X, -s.Orientation.Y))),
                 new Vector2(16, 16), (float)s.radius / 16F, 0F);
