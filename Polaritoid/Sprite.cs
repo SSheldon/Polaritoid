@@ -23,11 +23,8 @@ namespace Polaritoid
             this.rotation = rotation;
             this.origin = origin;
             this.scale = scale;
-            this.layerDepth = layerDepth;            
+            this.layerDepth = layerDepth;
         }
-
-        public Sprite(Texture2D texture, Vector2 origin, float scale)
-            : this(texture, Vector2.Zero, Color.White, 0F, origin, scale, 0F) { }
 
         public void Update(Vector2 position, Color tint, float rotation, float scale)
         {
