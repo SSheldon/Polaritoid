@@ -2,6 +2,7 @@ using System;
 
 namespace Polaritoid
 {
+#if WINDOWS || XBOX
     static class Program
     {
         /// <summary>
@@ -15,4 +16,6 @@ namespace Polaritoid
             }
         }
     }
+#endif
 }
+

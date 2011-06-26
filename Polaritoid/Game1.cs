@@ -7,10 +7,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
-using InputManagement;
 
 namespace Polaritoid
 {
@@ -23,7 +21,6 @@ namespace Polaritoid
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        TouchInputManager tI;
 
         SpriteFont font;
         Field enemies;
@@ -39,11 +36,8 @@ namespace Polaritoid
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            // Frame rate is 30 fps by default for Zune.
-            TargetElapsedTime = TimeSpan.FromSeconds(1 / 30.0);
-
-            tI = new TouchInputManager(this);
-            this.Components.Add(tI);
+            // Frame rate is 30 fps by default for Windows Phone.
+            TargetElapsedTime = TimeSpan.FromTicks(333333);
         }
 
         /// <summary>
@@ -55,8 +49,6 @@ namespace Polaritoid
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            tI.TouchpadDeadZone = GamePadDeadZone.IndependentAxes;
-            tI.TouchpadPressed += new InputEventHandler(PlayPress);
 
             fieldWidth = 240;
             fieldHeight = 320;
@@ -127,7 +119,6 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            enemies.Player.velocity = tI.TouchpadPosition * 3F;
             if (enemies.Update(gameTime))
             {
                 //player is dead

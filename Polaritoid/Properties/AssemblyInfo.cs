@@ -8,19 +8,21 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Polaritoid")]
 [assembly: AssemblyProduct("Polaritoid")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components. Zune assemblies do not support COM.
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type. Only Windows
+// assemblies support COM.
 [assembly: ComVisible(false)]
 
-// If this assembly is the startup assembly, the following Guid is used to
-// uniquely identify the title storage container when deploying this assembly
-// to the Zune.
-[assembly: Guid("63edb511-a56d-4a9f-b975-35dfa46aa2c8")]
+// On Windows, the following GUID is for the ID of the typelib if this
+// project is exposed to COM. On other platforms, it unique identifies the
+// title storage container when deploying this assembly to the device.
+[assembly: Guid("b63c26c4-d925-4ee2-b8f9-2e59fc141841")]
 
 // Version information for an assembly consists of the following four values:
 //
