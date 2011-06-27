@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
+    public enum Polarity { Red, Blue, Both };
+
     public class Shape
     {
         public Vector2 velocity = Vector2.Zero;

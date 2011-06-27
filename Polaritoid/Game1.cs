@@ -12,8 +12,6 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Polaritoid
 {
-    public enum Polarity { Red, Blue, Both };
-
     /// <summary>
     /// This is the main type for your game
     /// </summary>
