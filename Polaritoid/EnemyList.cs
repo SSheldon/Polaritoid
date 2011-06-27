@@ -64,12 +64,20 @@ namespace Polaritoid
         public bool Update(GameTime gameTime)
         {
             time = gameTime.TotalGameTime;
-            bool playerDead = false;
             for (int i = 0; i < shapes.Count; i++) shapes[i].Update();
+            return DeathCheck();
+        }
+
+        /// <summary>
+        /// Removes dead shapes and returns true if the player is dead.
+        /// </summary>
+        private bool DeathCheck()
+        {
+            bool playerDead = false;
             for (int counter = shapes.Count - 1; counter >= 0; counter--)
             {
                 Shape s = shapes[counter];
-                if (s != player && s.CollisionCheck(player))
+                if (s != Player && s.CollisionCheck(Player))
                 {
                     if (s.KillsPlayer())
                     {
