@@ -23,7 +23,7 @@ namespace Polaritoid
         SpriteBatch spriteBatch;
 
         SpriteFont font;
-        Field enemies;
+        Field field;
         Dictionary<Type, Texture2D> textures;
         /// <summary>
         /// The position of the bottom-left corner of the view window.
@@ -58,7 +58,7 @@ namespace Polaritoid
 
         void PlayPress()
         {
-            enemies.Player.polarity = enemies.Player.polarity == Polarity.Red ? Polarity.Blue : Polarity.Red;
+            field.Player.polarity = field.Player.polarity == Polarity.Red ? Polarity.Blue : Polarity.Red;
         }
 
         /// <summary>
@@ -93,15 +93,15 @@ namespace Polaritoid
 
         protected override void BeginRun()
         {
-            enemies = new Field(480, 800);
-            enemies.Spawn(typeof(Player), new Vector2(40, 40), Polarity.Red);
-            enemies.Spawn(typeof(Chaser), new Vector2(80, 40), Polarity.Red);
-            enemies.Spawn(typeof(Smarty), new Vector2(80, 80), Polarity.Blue);
-            enemies.Spawn(typeof(Stander), new Vector2(40, 80), Polarity.Blue);
-            enemies.Spawn(typeof(Rover), new Vector2(80, 80), Polarity.Red);
-            enemies.Spawn(typeof(Dual), new Vector2(160, 160), Polarity.Blue);
-            enemies.Spawn(typeof(Shooter), new Vector2(160, 200), Polarity.Red);
-            enemies.Spawn(typeof(Layer), new Vector2(40, 200), Polarity.Blue);
+            field = new Field(480, 800);
+            field.Spawn(typeof(Player), new Vector2(40, 40), Polarity.Red);
+            field.Spawn(typeof(Chaser), new Vector2(80, 40), Polarity.Red);
+            field.Spawn(typeof(Smarty), new Vector2(80, 80), Polarity.Blue);
+            field.Spawn(typeof(Stander), new Vector2(40, 80), Polarity.Blue);
+            field.Spawn(typeof(Rover), new Vector2(80, 80), Polarity.Red);
+            field.Spawn(typeof(Dual), new Vector2(160, 160), Polarity.Blue);
+            field.Spawn(typeof(Shooter), new Vector2(160, 200), Polarity.Red);
+            field.Spawn(typeof(Layer), new Vector2(40, 200), Polarity.Blue);
 
             base.BeginRun();
         }
@@ -117,7 +117,7 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (enemies.Update(gameTime))
+            if (field.Update(gameTime))
             {
                 //player is dead
                 //this.Exit();
@@ -136,7 +136,7 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            foreach (Shape s in enemies)
+            foreach (Shape s in field)
             {
                 GenerateSprite(s).Draw(spriteBatch);
                 if (s is Dual) GenerateOtherSprite((Dual)s).Draw(spriteBatch);
