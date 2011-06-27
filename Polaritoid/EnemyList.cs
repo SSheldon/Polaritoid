@@ -45,15 +45,20 @@ namespace Polaritoid
             return this.GetEnumerator();
         }
 
+        private void Spawn(Shape s)
+        {
+            shapes.Add(s);
+        }
+
         public void Spawn(Type enemy, Vector2 position, Polarity polarity)
         {
-            shapes.Add((Shape)enemy.GetConstructor(new Type[] { typeof(Field), typeof(Vector2), typeof(Polarity) }).Invoke(
+            Spawn((Shape)enemy.GetConstructor(new Type[] { typeof(Field), typeof(Vector2), typeof(Polarity) }).Invoke(
                 new object[] { this, position, polarity }));
         }
 
         public void Spawn(Vector2 position, Polarity polarity, float direction)
         {
-            shapes.Add(new Rover(this, position, direction, polarity));
+            Spawn(new Rover(this, position, direction, polarity));
         }
 
         public bool Update(GameTime gameTime)
