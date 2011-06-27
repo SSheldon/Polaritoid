@@ -117,6 +117,15 @@ namespace Polaritoid
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            TouchCollection touches = TouchPanel.GetState();
+            if (touches.Count > 0)
+            {
+                field.Player.velocity = ScreenToField(touches[0].Position) - field.Player.position;
+                field.Player.velocity.Normalize();
+                field.Player.velocity *= 3F;
+            }
+            else field.Player.velocity = Vector2.Zero;
+
             if (field.Update(gameTime))
             {
                 //player is dead
@@ -157,6 +166,12 @@ namespace Polaritoid
         private Vector2 FieldToScreen(Vector2 v)
         {
             return new Vector2(v.X - viewCornerPosition.X,
+                GraphicsDevice.Viewport.Height - v.Y + viewCornerPosition.Y);
+        }
+
+        private Vector2 ScreenToField(Vector2 v)
+        {
+            return new Vector2(v.X + viewCornerPosition.X,
                 GraphicsDevice.Viewport.Height - v.Y + viewCornerPosition.Y);
         }
 
