@@ -175,13 +175,18 @@ namespace Polaritoid
                 GraphicsDevice.Viewport.Height - v.Y + viewCornerPosition.Y);
         }
 
+        /// <summary>
+        /// Radius of sprites.
+        /// </summary>
+        private const int RAD = 16;
+
         protected Sprite GenerateSprite(Shape s)
         {
             return new Sprite(textures[s.GetType()],
                 FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
                 VecOps.Direction(new Vector2(s.Orientation.X, -s.Orientation.Y)),
-                new Vector2(16, 16), (float)s.radius / 16F, 0F);
+                new Vector2(RAD, RAD), (float)s.radius / RAD, 0F);
         }
 
         protected Sprite GenerateOtherSprite(Dual s)
@@ -190,7 +195,7 @@ namespace Polaritoid
                 FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
                 VecOps.Direction(Vector2.Negate(new Vector2(s.Orientation.X, -s.Orientation.Y))),
-                new Vector2(16, 16), (float)s.radius / 16F, 0F);
+                new Vector2(RAD, RAD), (float)s.radius / RAD, 0F);
         }
     }
 }
