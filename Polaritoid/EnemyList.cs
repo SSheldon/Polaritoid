@@ -18,12 +18,26 @@ namespace Polaritoid
             get { return time; }
         }
         private List<Shape> shapes;
+        private Shape[,] grid;
+        private Shape this[Vector2 v]
+        {
+            get
+            {
+                return grid[(int)(v.X / 20), (int)(v.Y / 20)];
+            }
+            set
+            {
+                grid[(int)(v.X / 20), (int)(v.Y / 20)] = value;
+            }
+        }
 
         public Field(int width, int height)
         {
-            shapes = new List<Shape>();
             this.width = width;
             this.height = height;
+            shapes = new List<Shape>();
+            //20 < r * sqrt(2), so only one shape will fit in a square on the grid
+            grid = new Shape[(int)Math.Ceiling(width / 20.0), (int)Math.Ceiling(height / 20.0)];
         }
 
         public IEnumerator<Shape> GetEnumerator()
@@ -44,6 +58,7 @@ namespace Polaritoid
                     player = (Player)s;
                 //else we're trying to add a second player?
             }
+            this[s.position] = s;
             shapes.Add(s);
         }
 
