@@ -10,16 +10,7 @@ namespace Polaritoid
         private Player player;
         public Player Player
         {
-            get
-            {
-                if (player == null)
-                    foreach (Shape s in this)
-                    {
-                        if (s is Player) player = (Player)s;
-                        break;
-                    }
-                return player;
-            }
+            get { return player; }
         }
         private TimeSpan time;
         public TimeSpan Time
@@ -47,6 +38,12 @@ namespace Polaritoid
 
         private void Spawn(Shape s)
         {
+            if (s is Player)
+            {
+                if (player == null)
+                    player = (Player)s;
+                //else we're trying to add a second player?
+            }
             shapes.Add(s);
         }
 
