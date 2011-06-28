@@ -18,9 +18,9 @@ namespace Polaritoid
             if (velocity != Vector2.Zero) direction = VecOps.Direction(velocity);
         }
 
-        public override Vector2 Orientation
+        public override float Direction
         {
-            get { return VecOps.Polar(1F, direction); }
+            get { return direction; }
         }
     }
 }

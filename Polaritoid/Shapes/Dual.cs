@@ -3,18 +3,12 @@ using Microsoft.Xna.Framework;
 
 namespace Polaritoid
 {
-    public class Dual : Chaser, IDirectable
+    public class Dual : Chaser
     {
         private float direction;
-        public float Direction
+        public override float Direction
         {
             get { return direction; }
-            set
-            {
-                direction = value;
-                if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-                if (direction < 0) direction += 2F * (float)Math.PI;
-            }
         }
 
         public Dual(Field field, Vector2 position, Polarity polarity)
@@ -27,8 +21,9 @@ namespace Polaritoid
         {
             base.PreMove();
 
-            if (!IsPlayerPolarity) this.TurnTowards(velocity);
-            else this.TurnTowards(Vector2.Negate(velocity));
+            direction += TurnTowards(!IsPlayerPolarity ? velocity : Vector2.Negate(velocity));
+            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
+            if (direction < 0) direction += 2F * (float)Math.PI;
         }
 
         private bool OppositeIsPlayerPolarity
@@ -46,7 +41,7 @@ namespace Polaritoid
         /// </summary>
         public override bool KillsPlayer()
         {
-            if (VecOps.AngleBetween(Orientation, velocity) < (float)Math.PI * .5F)
+            if (VecOps.AngleBetween(VecOps.Polar(1F, direction), velocity) < (float)Math.PI * .5F)
             {
                 //player collided with polarity side
                 return base.KillsPlayer();
@@ -56,11 +51,6 @@ namespace Polaritoid
                 //player collided with opposite polarity side
                 return !OppositeIsPlayerPolarity;
             }
-        }
-
-        public override Vector2 Orientation
-        {
-            get { return VecOps.Polar(1F, direction); }
         }
     }
 }

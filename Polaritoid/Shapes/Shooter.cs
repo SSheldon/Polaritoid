@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Polaritoid
 {
-    public class Shooter : Stander, IDirectable
+    public class Shooter : Stander
     {
         public TimeSpan? lastShot;
 
@@ -17,7 +17,9 @@ namespace Polaritoid
         {
             if (!lastShot.HasValue) lastShot = field.Time;
 
-            this.TurnTowards(field.Player.position - position);
+            direction += TurnTowards(field.Player.position - position);
+            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
+            if (direction < 0) direction += 2F * (float)Math.PI;
 
             if (field.Time.Subtract(lastShot.Value).Seconds > 2)
             {

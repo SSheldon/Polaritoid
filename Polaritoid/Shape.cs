@@ -51,9 +51,9 @@ namespace Polaritoid
             get { return velocity.Length(); }
         }
 
-        public virtual Vector2 Orientation
+        public virtual float Direction
         {
-            get { return Vector2.Normalize(velocity); }
+            get { return VecOps.Direction(velocity); }
         }
 
         public virtual bool KillsPlayer()
@@ -69,35 +69,26 @@ namespace Polaritoid
                     polarity == Polarity.Red && field.Player.polarity != Polarity.Blue;
             }
         }
-    }
 
-    public interface IDirectable
-    {
-        float Direction
+        /// <summary>
+        /// Returns the angle by which the shape should turn to attain the specified angle.
+        /// </summary>
+        protected float TurnTowards(float dir)
         {
-            get;
-            set;
-        }
-    }
-
-    public static class IDirectableExtension
-    {
-        public static void TurnTowards(this IDirectable s, float dir)
-        {
-            float diff = Math.Abs(dir - s.Direction);
-            if ((diff > (float)Math.PI && dir < s.Direction) || (diff <= (float)Math.PI && dir > s.Direction))
-                s.Direction += diff < .05F ? diff : .05F;
-            else
-                if ((diff <= (float)Math.PI && dir < s.Direction) || (diff > (float)Math.PI && dir > s.Direction))
-                    s.Direction -= diff < .05F ? diff : .05F;
-
-            if (s.Direction >= 2F * (float)Math.PI) s.Direction -= 2F * (float)Math.PI;
-            if (s.Direction < 0) s.Direction += 2F * (float)Math.PI;
+            float diff = Math.Abs(dir - Direction);
+            if ((diff > (float)Math.PI && dir < Direction) || (diff <= (float)Math.PI && dir > Direction))
+                return (diff < .05F ? diff : .05F);
+            else if ((diff <= (float)Math.PI && dir < Direction) || (diff > (float)Math.PI && dir > Direction))
+                return -(diff < .05F ? diff : .05F);
+            else return 0F;
         }
 
-        public static void TurnTowards(this IDirectable s, Vector2 orientation)
+        /// <summary>
+        /// Returns the angle by which the shape should turn to attain the specified orientation.
+        /// </summary>
+        protected float TurnTowards(Vector2 orientation)
         {
-            s.TurnTowards(VecOps.Direction(orientation));
+            return TurnTowards(VecOps.Direction(orientation));
         }
     }
 }
