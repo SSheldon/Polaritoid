@@ -59,8 +59,7 @@ static class VecOps
     /// <param name="vectorProjectedOnto">The vector that is being projected onto.</param>
     public static Vector2 Projection(Vector2 projectedVector, Vector2 vectorProjectedOnto)
     {
-        Vector3 vec = Projection(new Vector3(projectedVector, 0), new Vector3(vectorProjectedOnto, 0));
-        return new Vector2(vec.X, vec.Y);
+        return (Vector2.Dot(projectedVector, vectorProjectedOnto) / vectorProjectedOnto.LengthSquared()) * vectorProjectedOnto;
     }
 
     #region Angle Methods
@@ -70,9 +69,7 @@ static class VecOps
     public static float AngleBetween(Vector3 value1, Vector3 value2)
     {
         float a = Vector3.Dot(value1, value2) / (value1.Length() * value2.Length());
-        if (a > 1F) a = 1F;
-        if (a < -1F) a = -1F;
-        return (float)Math.Acos((double)a);
+        return (float)Math.Acos((double)MathHelper.Clamp(a, -1F, 1F));
     }
 
     /// <summary>
@@ -80,7 +77,8 @@ static class VecOps
     /// </summary>
     public static float AngleBetween(Vector2 value1, Vector2 value2)
     {
-        return AngleBetween(new Vector3(value1, 0), new Vector3(value2, 0));
+        float a = Vector2.Dot(value1, value2) / (value1.Length() * value2.Length());
+        return (float)Math.Acos((double)MathHelper.Clamp(a, -1F, 1F));
     }
 
     /// <summary>
