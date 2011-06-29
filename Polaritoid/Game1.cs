@@ -192,7 +192,7 @@ namespace Polaritoid
             return new Sprite(textures[typeof(Dual)],
                 FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
-                -s.Direction + (float)Math.PI,
+                -s.Direction + MathHelper.Pi,
                 new Vector2(RAD, RAD), (float)s.radius / RAD, 0F);
         }
     }
