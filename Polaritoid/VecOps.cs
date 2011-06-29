@@ -3,15 +3,7 @@ using Microsoft.Xna.Framework;
 
 static class VecOps
 {
-    /// <summary>
-    /// Calculates the direction of a Vector2, measured in terms of the angle, in radians, measured counterclockwise from the positive x-axis to the Vector2.
-    /// </summary>
-    /// <param name="vec">Vector2 whose direction is to be calculated.</param>
-    public static float Direction(Vector2 value)
-    {
-        return value.Y < 0 ? (float)(2D * Math.PI + Math.Atan2((double)value.Y, (double)value.X)) : (float)Math.Atan2((double)value.Y, (double)value.X);
-    }
-
+    #region Vector Creators
     /// <summary>
     /// Returns a Vector2 containing the 2D Cartesian coordinates of a vector specified in polar notation.
     /// </summary>
@@ -40,6 +32,7 @@ static class VecOps
             radius * (float)Math.Sin((double)zenith) * (float)Math.Sin((double)azimuth),
             radius * (float)Math.Cos((double)zenith));
     }
+    #endregion
 
     /// <summary>
     /// Calculates the triple product of three Vector3s.
@@ -70,6 +63,7 @@ static class VecOps
         return new Vector2(vec.X, vec.Y);
     }
 
+    #region Angle Methods
     /// <summary>
     /// Calculates the angle, measured in radians, between two vectors.
     /// </summary>
@@ -90,50 +84,12 @@ static class VecOps
     }
 
     /// <summary>
-    /// Returns a value that indicates whether the two vectors are parallel.
+    /// Calculates the direction of a Vector2, measured in terms of the angle, in radians, measured counterclockwise from the positive x-axis to the Vector2.
     /// </summary>
-    public static bool Parallel(Vector3 vec1, Vector3 vec2)
+    /// <param name="vec">Vector2 whose direction is to be calculated.</param>
+    public static float Direction(Vector2 value)
     {
-        return AngleBetween(vec1, vec2) == (float)Math.PI || AngleBetween(vec1, vec2) == 0;
+        return value.Y < 0 ? (float)(2D * Math.PI + Math.Atan2((double)value.Y, (double)value.X)) : (float)Math.Atan2((double)value.Y, (double)value.X);
     }
-
-    /// <summary>
-    /// Returns a value that indicates whether the two vectors are parallel.
-    /// </summary>
-    public static bool Parallel(Vector2 vec1, Vector2 vec2)
-    {
-        return Parallel(new Vector3(vec1, 0), new Vector3(vec2, 0));
-    }
-
-    /// <summary>
-    /// Returns a value that indicates whether the two vectors are orthogonal (form a right angle).
-    /// </summary>
-    public static bool Orthogonal(Vector3 vec1, Vector3 vec2)
-    {
-        return AngleBetween(vec1, vec2) == .5F * (float)Math.PI;
-    }
-
-    /// <summary>
-    /// Returns a value that indicates whether the two vectors are orthogonal (form a right angle).
-    /// </summary>
-    public static bool Orthogonal(Vector2 vec1, Vector2 vec2)
-    {
-        return Orthogonal(new Vector3(vec1, 0), new Vector3(vec2, 0));
-    }
-
-    /// <summary>
-    /// Converts radians to degrees.
-    /// </summary>
-    public static float RadianToDegree(float value)
-    {
-        return (value / (float)Math.PI) * 180F;
-    }
-
-    /// <summary>
-    /// Converts degrees to radians.
-    /// </summary>
-    public static float DegreeToRadian(float value)
-    {
-        return (value / 180F) * (float)Math.PI;
-    }
+    #endregion
 }
