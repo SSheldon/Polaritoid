@@ -16,13 +16,13 @@ namespace Polaritoid
 
         public override void  PreMove()
         {
-            if ((position + velocity).X < radius)
+            if ((position + velocity).X < RADIUS)
                 velocity = Vector2.Reflect(velocity, Vector2.UnitX);
-            if ((position + velocity).X > field.width - radius)
+            if ((position + velocity).X > field.width - RADIUS)
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitX);
-            if ((position + velocity).Y < radius)
+            if ((position + velocity).Y < RADIUS)
                 velocity = Vector2.Reflect(velocity, Vector2.UnitY);
-            if ((position + velocity).Y > field.height - radius)
+            if ((position + velocity).Y > field.height - RADIUS)
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitY);
         }
     }

@@ -184,7 +184,7 @@ namespace Polaritoid
                 FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
                 -s.Direction,
-                new Vector2(RAD, RAD), (float)s.radius / RAD, 0F);
+                new Vector2(RAD, RAD), (float)Shape.RADIUS / RAD, 0F);
         }
 
         protected Sprite GenerateOtherSprite(Dual s)
@@ -193,7 +193,7 @@ namespace Polaritoid
                 FieldToScreen(s.position),
                 (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
                 -s.Direction + MathHelper.Pi,
-                new Vector2(RAD, RAD), (float)s.radius / RAD, 0F);
+                new Vector2(RAD, RAD), (float)Shape.RADIUS / RAD, 0F);
         }
     }
 }

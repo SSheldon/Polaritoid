@@ -9,10 +9,11 @@ namespace Polaritoid
 
     public class Shape
     {
+        public const int RADIUS = 16;
+
         public Vector2 velocity = Vector2.Zero;
         public Vector2 position;
         public Polarity polarity;
-        public int radius = 16;
         protected Field field;
 
         public Shape(Field field, Vector2 position, Polarity polarity)
@@ -35,15 +36,15 @@ namespace Polaritoid
         public void Move()
         {
             position += velocity;
-            if (position.X < radius) position.X = radius;
-            if (position.X > field.width - radius) position.X = field.width - radius;
-            if (position.Y < radius) position.Y = radius;
-            if (position.Y > field.height - radius) position.Y = field.height - radius;
+            if (position.X < RADIUS) position.X = RADIUS;
+            if (position.X > field.width - RADIUS) position.X = field.width - RADIUS;
+            if (position.Y < RADIUS) position.Y = RADIUS;
+            if (position.Y > field.height - RADIUS) position.Y = field.height - RADIUS;
         }
 
         public virtual bool CollisionCheck(Shape other)
         {
-            return Vector2.Distance(other.position, position) <= radius * 2;
+            return Vector2.Distance(other.position, position) <= RADIUS * 2;
         }
 
         public float Speed
