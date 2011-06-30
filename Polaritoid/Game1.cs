@@ -143,7 +143,7 @@ namespace Polaritoid
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            foreach (Shape s in field)
+            foreach (Shape s in field.Shapes)
             {
                 GenerateSprite(s).Draw(spriteBatch);
                 if (s is Dual) GenerateOtherSprite((Dual)s).Draw(spriteBatch);

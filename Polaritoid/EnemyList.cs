@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Polaritoid
 {
-    public class Field : IEnumerable<Shape>
+    public class Field
     {
         public readonly int width, height;
         private Player player;
@@ -40,14 +40,31 @@ namespace Polaritoid
             grid = new Shape[(int)Math.Ceiling(width / 20.0), (int)Math.Ceiling(height / 20.0)];
         }
 
-        public IEnumerator<Shape> GetEnumerator()
+        public IEnumerable<Shape> Shapes
         {
-            return shapes.GetEnumerator();
+            get
+            {
+                for (int i = 0; i < shapes.Count; i++)
+                {
+                    yield return shapes[i];
+                }
+            }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        public IEnumerable<Shape> SurroundingShapes(Vector2 position)
         {
-            return this.GetEnumerator();
+            int x = (int)(position.X / 20);
+            int y = (int)(position.Y / 20);
+            for (int i = x - 1; i <= x + 1; i++)
+            {
+                for (int j = y - 1; j <= y + 1; j++)
+                {
+                    if (i >= 0 && i < grid.GetLength(0) &&
+                        j >= 0 && j < grid.GetLength(1) &&
+                        grid[i, j] != null)
+                        yield return grid[i, j];
+                }
+            }
         }
 
         private void Spawn(Shape s)
@@ -76,7 +93,7 @@ namespace Polaritoid
         public bool Update(GameTime gameTime)
         {
             time = gameTime.TotalGameTime;
-            for (int i = 0; i < shapes.Count; i++) shapes[i].Update();
+            foreach (Shape s in Shapes) s.Update();
             return DeathCheck();
         }
 
