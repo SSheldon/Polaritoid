@@ -21,9 +21,8 @@ namespace Polaritoid
         {
             base.PreMove();
 
-            direction += TurnTowards(!IsPlayerPolarity ? velocity : Vector2.Negate(velocity));
-            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-            if (direction < 0) direction += 2F * (float)Math.PI;
+            direction = MathHelper.WrapAngle(direction +
+                TurnTowards(!IsPlayerPolarity ? velocity : Vector2.Negate(velocity)));
         }
 
         private bool OppositeIsPlayerPolarity
@@ -41,7 +40,7 @@ namespace Polaritoid
         /// </summary>
         public override bool KillsPlayer()
         {
-            if (VecOps.AngleBetween(VecOps.Polar(1F, direction), velocity) < (float)Math.PI * .5F)
+            if (VecOps.AngleBetween(VecOps.Polar(1F, direction), velocity) < MathHelper.PiOver2)
             {
                 //player collided with polarity side
                 return base.KillsPlayer();

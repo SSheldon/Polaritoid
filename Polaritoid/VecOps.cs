@@ -87,7 +87,7 @@ static class VecOps
     /// <param name="vec">Vector2 whose direction is to be calculated.</param>
     public static float Direction(Vector2 value)
     {
-        return value.Y < 0 ? (float)(2D * Math.PI + Math.Atan2((double)value.Y, (double)value.X)) : (float)Math.Atan2((double)value.Y, (double)value.X);
+        return (float)Math.Atan2((double)value.Y, (double)value.X);
     }
     #endregion
 }

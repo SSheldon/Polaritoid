@@ -19,9 +19,7 @@ namespace Polaritoid
 
         public override void PreMove()
         {
-            direction += .05F;
-            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-            if (direction < 0) direction += 2F * (float)Math.PI;
+            direction = MathHelper.WrapAngle(direction + .05F);
         }
     }
 }

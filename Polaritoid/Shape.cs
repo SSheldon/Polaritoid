@@ -70,17 +70,21 @@ namespace Polaritoid
             }
         }
 
+        private static float AngleTo(float from, float to)
+        {
+            //assume from and to are wrapped angles
+            float diff = to - from;
+            if (Math.Abs(diff) > MathHelper.Pi)
+                return (diff > 0 ? -1F : 1F) * MathHelper.TwoPi + diff;
+            else return diff;
+        }
+
         /// <summary>
         /// Returns the angle by which the shape should turn to attain the specified angle.
         /// </summary>
         protected float TurnTowards(float dir)
         {
-            float diff = Math.Abs(dir - Direction);
-            if ((diff > (float)Math.PI && dir < Direction) || (diff <= (float)Math.PI && dir > Direction))
-                return (diff < .05F ? diff : .05F);
-            else if ((diff <= (float)Math.PI && dir < Direction) || (diff > (float)Math.PI && dir > Direction))
-                return -(diff < .05F ? diff : .05F);
-            else return 0F;
+            return MathHelper.Clamp(AngleTo(Direction, dir), -.05F, .05F);
         }
 
         /// <summary>

@@ -17,9 +17,7 @@ namespace Polaritoid
         {
             if (!lastShot.HasValue) lastShot = field.Time;
 
-            direction += TurnTowards(field.Player.position - position);
-            if (direction >= 2F * (float)Math.PI) direction -= 2F * (float)Math.PI;
-            if (direction < 0) direction += 2F * (float)Math.PI;
+            direction = MathHelper.WrapAngle(direction + TurnTowards(field.Player.position - position));
 
             if (field.Time.Subtract(lastShot.Value).Seconds > 2)
             {
