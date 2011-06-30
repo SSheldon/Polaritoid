@@ -12,17 +12,18 @@ namespace Polaritoid
         }
 
         public Rover(Field field, Vector2 position, Polarity polarity)
-            : this(field, position, (float)(new Random().NextDouble()) * MathHelper.TwoPi, polarity) { }
+            : this(field, position, MathHelper.WrapAngle((float)(new Random().NextDouble()) * MathHelper.TwoPi), polarity) { }
 
         public override void  PreMove()
         {
-            if ((position + velocity).X < RADIUS)
+            Vector2 nextPos = position + velocity;
+            if (nextPos.X < RADIUS)
                 velocity = Vector2.Reflect(velocity, Vector2.UnitX);
-            if ((position + velocity).X > field.width - RADIUS)
+            if (nextPos.X > field.width - RADIUS)
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitX);
-            if ((position + velocity).Y < RADIUS)
+            if (nextPos.Y < RADIUS)
                 velocity = Vector2.Reflect(velocity, Vector2.UnitY);
-            if ((position + velocity).Y > field.height - RADIUS)
+            if (nextPos.Y > field.height - RADIUS)
                 velocity = Vector2.Reflect(velocity, -Vector2.UnitY);
         }
     }
