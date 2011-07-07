@@ -7,6 +7,8 @@ namespace Polaritoid
     public class Field
     {
         public readonly int width, height;
+        //20 < r * sqrt(2), so only one shape will fit in a square on the grid
+        private const int TILESIZE = 20;
         private Player player;
         public Player Player
         {
@@ -23,11 +25,11 @@ namespace Polaritoid
         {
             get
             {
-                return grid[(int)(v.X / 20), (int)(v.Y / 20)];
+                return grid[(int)(v.X / TILESIZE), (int)(v.Y / TILESIZE)];
             }
             set
             {
-                grid[(int)(v.X / 20), (int)(v.Y / 20)] = value;
+                grid[(int)(v.X / TILESIZE), (int)(v.Y / TILESIZE)] = value;
             }
         }
 
@@ -36,8 +38,8 @@ namespace Polaritoid
             this.width = width;
             this.height = height;
             shapes = new List<Shape>();
-            //20 < r * sqrt(2), so only one shape will fit in a square on the grid
-            grid = new Shape[(int)Math.Ceiling(width / 20.0), (int)Math.Ceiling(height / 20.0)];
+            grid = new Shape[(int)Math.Ceiling((double)width / TILESIZE),
+                (int)Math.Ceiling((double)height / TILESIZE)];
         }
 
         public IEnumerable<Shape> Shapes
@@ -53,8 +55,8 @@ namespace Polaritoid
 
         public IEnumerable<Shape> SurroundingShapes(Vector2 position)
         {
-            int x = (int)(position.X / 20);
-            int y = (int)(position.Y / 20);
+            int x = (int)(position.X / TILESIZE);
+            int y = (int)(position.Y / TILESIZE);
             for (int i = x - 1; i <= x + 1; i++)
             {
                 for (int j = y - 1; j <= y + 1; j++)
