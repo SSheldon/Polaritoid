@@ -27,11 +27,9 @@ namespace Polaritoid
         {
             PreMove();
             Move(velocity);
-            PostMove();
         }
 
         public virtual void PreMove() { }
-        public virtual void PostMove() { }
 
         public void Move(Vector2 movement)
         {
