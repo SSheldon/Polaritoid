@@ -103,9 +103,21 @@ namespace Polaritoid
             //update player
             player.Update();
             //update enemies
-            for (int counter = enemies.Count - 1; counter >= 0; counter--)
+            for (int i = 0, next = 0; i < enemies.Count; i = next)
             {
-                Shape s = enemies[counter];
+                //advance next to the next non-null shape
+                do
+                {
+                    next++;
+                } while (next < enemies.Count && enemies[next] == null);
+                //if current is null, swap next into its spot
+                if (enemies[i] == null)
+                {
+                    //break if no more non-null shapes
+                    if (!MoveUpNext(i, next)) break;
+                }
+                Shape s = enemies[i];
+                //update current
                 s.Update();
                 if (s.CollisionCheck(Player))
                 {
@@ -115,11 +127,37 @@ namespace Polaritoid
                     }
                     else
                     {
-                        enemies.RemoveAt(counter);
+                        //shape is dead, nullify it
+                        enemies[i] = null;
+                        //swap next into its spot
+                        MoveUpNext(i, next);
+                        //decrement so swapped shape gets updated
+                        i--;
                     }
-                }
-            }
+                } //end collision check
+            } //end enemies update loop
             return playerDead;
+        }
+
+        /// <summary>
+        /// Returns true if there was another shape to move up.
+        /// </summary>
+        private bool MoveUpNext(int i, int next)
+        {
+            if (next < enemies.Count)
+            {
+                //move next up and nullify current
+                enemies[i] = enemies[next];
+                enemies[next] = null;
+                return true;
+            }
+            else
+            {
+                //no more shapes, so remove the remaining nulls
+                for (int j = enemies.Count - 1; j >= i; j--)
+                    enemies.RemoveAt(j);
+                return false;
+            }
         }
     }
 }
