@@ -26,16 +26,16 @@ namespace Polaritoid
         public void Update()
         {
             PreMove();
-            Move();
+            Move(velocity);
             PostMove();
         }
 
         public virtual void PreMove() { }
         public virtual void PostMove() { }
 
-        public void Move()
+        public void Move(Vector2 movement)
         {
-            position += velocity;
+            position += movement;
             if (position.X < RADIUS) position.X = RADIUS;
             if (position.X > field.width - RADIUS) position.X = field.width - RADIUS;
             if (position.Y < RADIUS) position.Y = RADIUS;
