@@ -19,7 +19,7 @@ namespace Polaritoid
         {
             get { return time; }
         }
-        private List<Shape> shapes;
+        private List<Shape> enemies;
         private Shape[,] grid;
         private Shape this[Vector2 v]
         {
@@ -37,7 +37,7 @@ namespace Polaritoid
         {
             this.width = width;
             this.height = height;
-            shapes = new List<Shape>();
+            enemies = new List<Shape>();
             grid = new Shape[(int)Math.Ceiling((double)width / TILESIZE),
                 (int)Math.Ceiling((double)height / TILESIZE)];
         }
@@ -46,9 +46,10 @@ namespace Polaritoid
         {
             get
             {
-                for (int i = 0; i < shapes.Count; i++)
+                yield return player;
+                for (int i = 0; i < enemies.Count; i++)
                 {
-                    yield return shapes[i];
+                    yield return enemies[i];
                 }
             }
         }
@@ -75,10 +76,10 @@ namespace Polaritoid
             {
                 if (player == null)
                     player = (Player)s;
-                //else we're trying to add a second player?
+                else return; //we're trying to add a second player?
             }
+            else enemies.Add(s);
             this[s.position] = s;
-            shapes.Add(s);
         }
 
         public void Spawn(Type enemy, Vector2 position, Polarity polarity)
@@ -105,10 +106,10 @@ namespace Polaritoid
         private bool DeathCheck()
         {
             bool playerDead = false;
-            for (int counter = shapes.Count - 1; counter >= 0; counter--)
+            for (int counter = enemies.Count - 1; counter >= 0; counter--)
             {
-                Shape s = shapes[counter];
-                if (s != Player && s.CollisionCheck(Player))
+                Shape s = enemies[counter];
+                if (s.CollisionCheck(Player))
                 {
                     if (s.KillsPlayer())
                     {
@@ -116,7 +117,7 @@ namespace Polaritoid
                     }
                     else
                     {
-                        shapes.RemoveAt(counter);
+                        enemies.RemoveAt(counter);
                     }
                 }
             }
