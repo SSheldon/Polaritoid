@@ -23,10 +23,14 @@ namespace Polaritoid
             this.polarity = polarity;
         }
 
-        public void Update()
+        /// <summary>
+        /// Returns true if this shape hit the player.
+        /// </summary>
+        public bool Update()
         {
             PreMove();
             Move(velocity);
+            return CollisionCheck(field.Player);
         }
 
         public virtual void PreMove() { }

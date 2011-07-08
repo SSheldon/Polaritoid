@@ -102,7 +102,7 @@ namespace Polaritoid
             bool playerDead = false;
             //update player
             this[player.position] = null;
-            player.Update();
+            player.Move(player.velocity);
             AssignToGrid(player);
             //update enemies
             Nullerator<Shape> num = new Nullerator<Shape>(enemies);
@@ -111,9 +111,9 @@ namespace Polaritoid
                 Shape s = num.Current;
                 this[s.position] = null;
                 //update current
-                s.Update();
-                if (s.CollisionCheck(Player))
+                if (s.Update())
                 {
+                    //shape hit the player
                     if (s.KillsPlayer())
                     {
                         playerDead = true;
