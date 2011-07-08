@@ -93,22 +93,20 @@ namespace Polaritoid
             Spawn(new Rover(this, position, direction, polarity));
         }
 
+        /// <summary>
+        /// Returns true if the player is dead.
+        /// </summary>
         public bool Update(GameTime gameTime)
         {
             time = gameTime.TotalGameTime;
-            foreach (Shape s in Shapes) s.Update();
-            return DeathCheck();
-        }
-
-        /// <summary>
-        /// Removes dead shapes and returns true if the player is dead.
-        /// </summary>
-        private bool DeathCheck()
-        {
             bool playerDead = false;
+            //update player
+            player.Update();
+            //update enemies
             for (int counter = enemies.Count - 1; counter >= 0; counter--)
             {
                 Shape s = enemies[counter];
+                s.Update();
                 if (s.CollisionCheck(Player))
                 {
                     if (s.KillsPlayer())
