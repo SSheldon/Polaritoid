@@ -79,7 +79,7 @@ namespace Polaritoid
                 else return; //we're trying to add a second player?
             }
             else enemies.Add(s);
-            this[s.position] = s;
+            AssignToGrid(s);
         }
 
         public void Spawn(Type enemy, Vector2 position, Polarity polarity)
@@ -101,7 +101,9 @@ namespace Polaritoid
             time = gameTime.TotalGameTime;
             bool playerDead = false;
             //update player
+            this[player.position] = null;
             player.Update();
+            AssignToGrid(player);
             //update enemies
             for (int i = 0, next = 0; i < enemies.Count; i = next)
             {
@@ -117,6 +119,7 @@ namespace Polaritoid
                     if (!MoveUpNext(i, next)) break;
                 }
                 Shape s = enemies[i];
+                this[s.position] = null;
                 //update current
                 s.Update();
                 if (s.CollisionCheck(Player))
@@ -128,6 +131,7 @@ namespace Polaritoid
                     else
                     {
                         //shape is dead, nullify it
+                        s = null;
                         enemies[i] = null;
                         //swap next into its spot
                         MoveUpNext(i, next);
@@ -135,6 +139,7 @@ namespace Polaritoid
                         i--;
                     }
                 } //end collision check
+                if (s != null) AssignToGrid(s);
             } //end enemies update loop
             return playerDead;
         }
@@ -158,6 +163,16 @@ namespace Polaritoid
                     enemies.RemoveAt(j);
                 return false;
             }
+        }
+
+        public bool AssignToGrid(Shape s)
+        {
+            if (this[s.position] == null)
+            {
+                this[s.position] = s;
+                return true;
+            }
+            else return false;
         }
     }
 }
