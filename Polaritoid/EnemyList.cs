@@ -105,20 +105,10 @@ namespace Polaritoid
             player.Update();
             AssignToGrid(player);
             //update enemies
-            for (int i = 0, next = 0; i < enemies.Count; i = next)
+            Nullerator<Shape> num = new Nullerator<Shape>(enemies);
+            while (num.MoveNext())
             {
-                //advance next to the next non-null shape
-                do
-                {
-                    next++;
-                } while (next < enemies.Count && enemies[next] == null);
-                //if current is null, swap next into its spot
-                if (enemies[i] == null)
-                {
-                    //break if no more non-null shapes
-                    if (!MoveUpNext(i, next)) break;
-                }
-                Shape s = enemies[i];
+                Shape s = num.Current;
                 this[s.position] = null;
                 //update current
                 s.Update();
@@ -132,11 +122,7 @@ namespace Polaritoid
                     {
                         //shape is dead, nullify it
                         s = null;
-                        enemies[i] = null;
-                        //swap next into its spot
-                        MoveUpNext(i, next);
-                        //decrement so swapped shape gets updated
-                        i--;
+                        num.Nullify();
                     }
                 } //end collision check
                 if (s != null) AssignToGrid(s);
