@@ -15,7 +15,7 @@ namespace Polaritoid
         }
 
         public Layer(Field field, Vector2 position, Polarity polarity)
-            : this(field, position, (float)(new Random().NextDouble()) * MathHelper.TwoPi, polarity) { }
+            : this(field, position, RandomAngle(), polarity) { }
 
         public override void PreMove()
         {

@@ -12,7 +12,12 @@ namespace Polaritoid
         }
 
         public Rover(Field field, Vector2 position, Polarity polarity)
-            : this(field, position, MathHelper.WrapAngle((float)(new Random().NextDouble()) * MathHelper.TwoPi), polarity) { }
+            : this(field, position, RandomAngle(), polarity) { }
+
+        protected static float RandomAngle()
+        {
+            return (float)(new Random().NextDouble()) * MathHelper.TwoPi - MathHelper.Pi;
+        }
 
         public override void  PreMove()
         {
