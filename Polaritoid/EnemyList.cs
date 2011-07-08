@@ -130,27 +130,6 @@ namespace Polaritoid
             return playerDead;
         }
 
-        /// <summary>
-        /// Returns true if there was another shape to move up.
-        /// </summary>
-        private bool MoveUpNext(int i, int next)
-        {
-            if (next < enemies.Count)
-            {
-                //move next up and nullify current
-                enemies[i] = enemies[next];
-                enemies[next] = null;
-                return true;
-            }
-            else
-            {
-                //no more shapes, so remove the remaining nulls
-                for (int j = enemies.Count - 1; j >= i; j--)
-                    enemies.RemoveAt(j);
-                return false;
-            }
-        }
-
         public bool AssignToGrid(Shape s)
         {
             if (this[s.position] == null)
