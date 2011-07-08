@@ -13,14 +13,15 @@ namespace Polaritoid
             direction = 0;
         }
 
-        public override void  PreMove()
-        {
-            if (velocity != Vector2.Zero) direction = VecOps.Direction(velocity);
-        }
-
         public override float Direction
         {
-            get { return direction; }
+            get
+            {
+                //cache direction so it doesn't jump if player stops moving
+                if (velocity != Vector2.Zero)
+                    direction = base.Direction;
+                return direction;
+            }
         }
     }
 }
