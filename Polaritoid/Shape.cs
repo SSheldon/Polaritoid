@@ -5,7 +5,42 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Polaritoid
 {
-    public enum Polarity { Red, Blue, Both };
+    public struct Polarity
+    {
+        public readonly bool red, blue;
+
+        private Polarity(bool red, bool blue)
+        {
+            this.red = red;
+            this.blue = blue;
+        }
+
+        public static readonly Polarity Red = new Polarity(true, false);
+        public static readonly Polarity Blue = new Polarity(false, true);
+        public static readonly Polarity Both = new Polarity(true, true);
+        public static readonly Polarity None = new Polarity(false, false);
+
+        public bool HasAllPolaritiesOf(Polarity other)
+        {
+            //if (other.red && !this.red) return false;
+            //if (other.blue && !this.blue) return false;
+            //return true;
+            return !(other.red && !this.red) && !(other.blue && !this.blue);
+        }
+
+        public bool HasPolaritiesLackedBy(Polarity other)
+        {
+            //if (!other.red && this.red) return true;
+            //if (!other.blue && this.blue) return true;
+            //return false;
+            return (!other.red && this.red) || (!other.blue && this.blue);
+        }
+
+        public Polarity Opposite
+        {
+            get { return new Polarity(!red, !blue); }
+        }
+    }
 
     public class Shape
     {
@@ -66,11 +101,7 @@ namespace Polaritoid
 
         public bool IsPlayerPolarity
         {
-            get
-            {
-                return polarity == Polarity.Blue && field.Player.polarity != Polarity.Red ||
-                    polarity == Polarity.Red && field.Player.polarity != Polarity.Blue;
-            }
+            get { return !polarity.HasPolaritiesLackedBy(field.Player.polarity); }
         }
 
         private static float AngleTo(float from, float to)

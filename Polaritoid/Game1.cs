@@ -54,11 +54,6 @@ namespace Polaritoid
             base.Initialize();
         }
 
-        void PlayPress()
-        {
-            field.Player.polarity = field.Player.polarity == Polarity.Red ? Polarity.Blue : Polarity.Red;
-        }
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -182,7 +177,7 @@ namespace Polaritoid
         {
             return new Sprite(textures[s.GetType()],
                 FieldToScreen(s.position),
-                (s.polarity == Polarity.Blue ? Color.Blue : (s.polarity == Polarity.Red ? Color.Red : Color.Purple)),
+                PolarityColor(s.polarity),
                 -s.Direction,
                 new Vector2(RAD, RAD), (float)Shape.RADIUS / RAD, 0F);
         }
@@ -191,9 +186,23 @@ namespace Polaritoid
         {
             return new Sprite(textures[typeof(Dual)],
                 FieldToScreen(s.position),
-                (s.polarity == Polarity.Blue ? Color.Red : (s.polarity == Polarity.Red ? Color.Blue : Color.Purple)),
+                PolarityColor(s.polarity.Opposite),
                 -s.Direction + MathHelper.Pi,
                 new Vector2(RAD, RAD), (float)Shape.RADIUS / RAD, 0F);
+        }
+
+        private Color PolarityColor(Polarity pol)
+        {
+            if (pol.red)
+            {
+                if (pol.blue) return Color.Purple;
+                else return Color.Red;
+            }
+            else
+            {
+                if (pol.blue) return Color.Blue;
+                else return Color.White;
+            }
         }
     }
 }

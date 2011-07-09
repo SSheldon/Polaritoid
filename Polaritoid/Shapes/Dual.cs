@@ -25,16 +25,6 @@ namespace Polaritoid
                 TurnTowards(!IsPlayerPolarity ? velocity : Vector2.Negate(velocity)));
         }
 
-        private bool OppositeIsPlayerPolarity
-        {
-            get
-            {
-                Polarity opp = (polarity == Polarity.Red ? Polarity.Blue : Polarity.Red);
-                return opp == Polarity.Blue && field.Player.polarity != Polarity.Red ||
-                    opp == Polarity.Red && field.Player.polarity != Polarity.Blue;
-            }
-        }
-
         /// <summary>
         /// Returns true if player is dead.
         /// </summary>
@@ -48,7 +38,7 @@ namespace Polaritoid
             else
             {
                 //player collided with opposite polarity side
-                return !OppositeIsPlayerPolarity;
+                return polarity.Opposite.HasPolaritiesLackedBy(field.Player.polarity);
             }
         }
     }
