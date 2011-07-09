@@ -21,7 +21,8 @@ namespace Polaritoid
 
             if (field.Time.Subtract(lastShot.Value).Seconds > 2)
             {
-                field.Spawn(position, polarity, Direction);
+                Vector2 offset = VecOps.Polar(2 * RADIUS, this.Direction);
+                field.Spawn(position + offset, polarity, Direction);
                 lastShot = field.Time;
             }
         }

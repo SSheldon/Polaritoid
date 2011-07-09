@@ -23,7 +23,8 @@ namespace Polaritoid
             if (!lastMine.HasValue) lastMine = field.Time;
             if (field.Time.Subtract(lastMine.Value).Seconds > 2)
             {
-                field.Spawn(typeof(Stander), position, minePolarity);
+                Vector2 offset = Vector2.Normalize(velocity) * (-2 * RADIUS);
+                field.Spawn(typeof(Stander), position + offset, minePolarity);
                 lastMine = field.Time;
             }
         }
