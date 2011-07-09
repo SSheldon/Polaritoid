@@ -54,16 +54,17 @@ namespace Polaritoid
             }
         }
 
-        public IEnumerable<Shape> SurroundingShapes(Vector2 position)
+        public IEnumerable<Shape> SurroundingShapes(Vector2 position, int d = 1)
         {
             int x = (int)(position.X / TILESIZE);
             int y = (int)(position.Y / TILESIZE);
-            for (int i = x - 1; i <= x + 1; i++)
+            int x1 = Math.Max(0, x - d), x2 = Math.Min(grid.GetLength(0) - 1, x + d);
+            int y1 = Math.Max(0, y - d), y2 = Math.Min(grid.GetLength(1) - 1, y + d);
+            for (int i = x1; i <= x2; i++)
             {
-                for (int j = y - 1; j <= y + 1; j++)
+                for (int j = y1; j <= y2; j++)
                 {
-                    if (i >= 0 && i < grid.GetLength(0) &&
-                        j >= 0 && j < grid.GetLength(1) &&
+                    if (i != x && j != y &&
                         grid[i, j] != null)
                         yield return grid[i, j];
                 }
