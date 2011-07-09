@@ -72,14 +72,15 @@ namespace Polaritoid
 
         private void Spawn(Shape s)
         {
+            if (!AssignToGrid(s)) return; //square was occupied
             if (s is Player)
             {
                 if (player == null)
                     player = (Player)s;
-                else return; //we're trying to add a second player?
+                //we can't add a second player
+                else this[s.position] = null;
             }
             else enemies.Add(s);
-            AssignToGrid(s);
         }
 
         public void Spawn(Type enemy, Vector2 position, Polarity polarity)
