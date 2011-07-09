@@ -11,7 +11,7 @@ namespace Polaritoid
         public override void PreMove()
         {
             base.PreMove();
-            if (IsPlayerPolarity) velocity = Vector2.Negate(velocity);
+            if (!KillsPlayer) velocity = Vector2.Negate(velocity);
         }
     }
 }

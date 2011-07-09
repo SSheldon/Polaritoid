@@ -115,7 +115,7 @@ namespace Polaritoid
                 if (s.Update())
                 {
                     //shape hit the player
-                    if (s.KillsPlayer())
+                    if (s.KillsPlayer)
                     {
                         playerDead = true;
                     }

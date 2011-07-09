@@ -94,14 +94,9 @@ namespace Polaritoid
             get { return VecOps.Direction(velocity); }
         }
 
-        public virtual bool KillsPlayer()
+        public virtual bool KillsPlayer
         {
-            return !IsPlayerPolarity;
-        }
-
-        public bool IsPlayerPolarity
-        {
-            get { return !polarity.HasPolaritiesLackedBy(field.Player.polarity); }
+            get { return polarity.HasPolaritiesLackedBy(field.Player.polarity); }
         }
 
         private static float AngleTo(float from, float to)
