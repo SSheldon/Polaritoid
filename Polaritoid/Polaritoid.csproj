@@ -19,7 +19,7 @@
     <XapFilename>$(AssemblyName).xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <XnaWindowsPhoneManifestTemplate>Properties\WMAppManifest.xml</XnaWindowsPhoneManifestTemplate>
-    <TileImage>Background.png</TileImage>
+    <TileImage>GameThumbnail.png</TileImage>
     <TileTitle>Polaritoid</TileTitle>
     <SupportedCultures>
     </SupportedCultures>
@@ -38,6 +38,7 @@
     <NoStdLib>true</NoStdLib>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <XnaCompressContent>false</XnaCompressContent>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Windows Phone' ">
     <DebugType>pdbonly</DebugType>
